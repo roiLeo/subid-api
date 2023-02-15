@@ -1,5 +1,5 @@
 import { Networks } from './types'
-import { getBitfrostApi } from './utils'
+import { getBitfrostApi, resolveOnfinalityUrl } from './utils';
 import { RelayChain } from '../../services/crowdloan/types'
 
 export const subsocial = {
@@ -14,21 +14,16 @@ export const subsocial = {
 export const standalones: Networks = {
   kusama: {
     name: 'Kusama',
-    node: 'wss://kusama.api.onfinality.io/ws?apikey=7f3dc170-944b-4830-9e62-863be28ac644',
+    node: resolveOnfinalityUrl('kusama'),
     icon: 'kusama.svg',
     isTransferable: true
   },
   polkadot: {
     name: 'Polkadot',
-    node: 'wss://polkadot.api.onfinality.io/ws?apikey=7f3dc170-944b-4830-9e62-863be28ac644',
+    node: resolveOnfinalityUrl('polkadot'),
     icon: 'polkadot.svg',
     isTransferable: true
   },
-  // "hydra-dx": {
-  //   name: 'Hydra-DX',
-  //   icon: 'hydrate.png',
-  //   node: 'wss://rpc-01.snakenet.hydradx.io'
-  // },
   sora: {
     name: 'SORA',
     icon: 'sora-substrate.svg',
@@ -41,22 +36,12 @@ export const standalones: Networks = {
     icon: 'edgeware-circle.svg',
     node: 'wss://edgeware.jelliedowl.net'
   },
-  // equilibrium: {
-  //   name: 'Equilibrium',
-  //   node: 'wss://node.equilibrium.io',
-  //   icon: 'equilibrium.svg'
-  // },
   chainx: {
     name: 'ChainX',
     icon: 'chainx.svg',
     node: 'wss://mainnet.chainx.org',
     isTransferable: true
   },
-  // unique: {
-  //   name: 'Unique testnet',
-  //   icon: 'unique.svg',
-  //   node: 'wss://testnet2.unique.network'
-  // },
   darwinia: {
     name: 'Darwinia',
     icon: 'darwinia.png',
@@ -67,7 +52,6 @@ export const standalones: Networks = {
     name: 'Darwinia Crab',
     icon: 'crab.svg',
     node: 'wss://crab-rpc.darwinia.network',
-    // node: 'wss://darwiniaarwinia-crab.api.onfinality.io/ws?apikey=7f3dc170-944b-4830-9e62-863be28ac644',
     isTransferable: true
   },
   polkadex: {
@@ -98,7 +82,6 @@ export const kusamaParachains: Networks = {
   altair: {
     name: 'Altair',
     node: 'wss://fullnode.altair.centrifuge.io',
-    // node: 'wss://altair.api.onfinality.io/ws?apikey=7f3dc170-944b-4830-9e62-863be28ac644',
     icon: 'altair.svg',
     paraId: 2088,
     vestingMethod: 'vesting.vest',
@@ -139,7 +122,7 @@ export const kusamaParachains: Networks = {
   },
   bifrost: {
     name: 'Bifrost',
-    node: 'wss://bifrost-parachain.api.onfinality.io/ws?apikey=7f3dc170-944b-4830-9e62-863be28ac644',
+    node: resolveOnfinalityUrl('bifrost-parachain'),
     icon: 'bifrost.svg',
     paraId: 2001,
     getApi: getBitfrostApi,
@@ -154,21 +137,12 @@ export const kusamaParachains: Networks = {
     isTransferable: true,
     tokenTransferMethod: 'assets.transfer(id,recipient,amount)'
   },
-  // 'shadow': {
-  //   'node': 'wss://shadow.crust.network/',
-  //   'paraId': 2012
-  // },
-  // 'encointer_canary': {
-  //   'node': 'wss://canary.encointer.org',
-  //   'paraId': 2014
-  // },
   genshiro: {
     name: 'Genshiro',
     icon: 'genshiro.svg',
     node: 'wss://node.genshiro.io',
     paraId: 2024,
     nativeToken: 'GENS'
-    // getApi: getGenshiroApi
   },
   integritee: {
     name: 'Integritee Network',
@@ -190,7 +164,6 @@ export const kusamaParachains: Networks = {
     name: 'Khala',
     icon: 'khala.svg',
     node: 'wss://khala-api.phala.network/ws',
-    // node: 'wss://khala.api.onfinality.io/ws?apikey=7f3dc170-944b-4830-9e62-863be28ac644',
     paraId: 2004,
     types: {
       BridgeChainId: 'u8'
@@ -201,7 +174,6 @@ export const kusamaParachains: Networks = {
   kintsugi: {
     name: 'Kintsugi BTC',
     icon: 'kintsugi.png',
-    // node: 'wss://api-kusama.interlay.io'
     node: 'wss://kintsugi.api.onfinality.io/public-ws',
     paraId: 2092,
     nativeToken: 'KINT',
@@ -218,7 +190,7 @@ export const kusamaParachains: Networks = {
   },
   moonriver: {
     name: 'Moonriver',
-    node: 'wss://moonriver.api.onfinality.io/ws?apikey=7f3dc170-944b-4830-9e62-863be28ac644',
+    node: resolveOnfinalityUrl('moonriver'),
     icon: 'moonriver.svg',
     paraId: 2023,
     isEthLike: true,
@@ -292,7 +264,6 @@ export const kusamaParachains: Networks = {
   zeitgeist: {
     name: 'Zeitgeist',
     node: 'wss://zeitgeist.api.onfinality.io/public-ws',
-    // node: 'wss://zeitgeist.api.onfinality.io/ws?apikey=7f3dc170-944b-4830-9e62-863be28ac644',
     icon: 'zeitgeist.png',
     paraId: 2101,
     vestingMethod: 'vesting.vest',
@@ -384,10 +355,6 @@ export const kusamaParachains: Networks = {
     isTransferable: true,
     tokenTransferMethod: 'currencies.transfer(recipient,id,amount)'
   },
-  // 'subgame': {
-  //   'node': 'wss://gamma.subgame.org/',
-  //   'paraId': 2018
-  // },
   invArch: {
     name: 'InvArch Tinkernet',
     node: 'wss://invarch-tinkernet.api.onfinality.io/public-ws',
@@ -447,7 +414,7 @@ export const kusamaParachains: Networks = {
 export const polkadotParachains: Networks = {
   moonbeam: {
     name: 'Moonbeam',
-    node: 'wss://moonbeam.api.onfinality.io/ws?apikey=7f3dc170-944b-4830-9e62-863be28ac644',
+    node: resolveOnfinalityUrl('moonbeam'),
     icon: 'moonbeam.png',
     paraId: 2004,
     isEthLike: true,
@@ -466,7 +433,6 @@ export const polkadotParachains: Networks = {
   astar: {
     name: 'Astar',
     node: 'wss://rpc.astar.network',
-    // node: 'wss://astar.api.onfinality.io/ws?apikey=7f3dc170-944b-4830-9e62-863be28ac644',
     icon: 'astar.png',
     paraId: 2006,
     vestingMethod: 'vesting.vest',
@@ -488,12 +454,6 @@ export const polkadotParachains: Networks = {
     icon: 'manta.png',
     paraId: 2015
   },
-  // enfinity: {
-  //   name: 'Efinity',
-  //   node: '',
-  //   icon: 'quartz.png',
-  //   paraId: 0
-  // },
   subdao: {
     name: 'SubDAO',
     node: '',
@@ -551,7 +511,6 @@ export const polkadotParachains: Networks = {
   interlay: {
     name: 'Interlay',
     node: 'wss://api.interlay.io/parachain',
-    // node: 'wss://interlay.api.onfinality.io/ws?apikey=7f3dc170-944b-4830-9e62-863be28ac644',
     icon: 'interlay.svg',
     paraId: 2032,
     nativeToken: 'INTR',
@@ -563,7 +522,6 @@ export const polkadotParachains: Networks = {
     name: 'Centrifuge',
     icon: 'centrifuge.png',
     node: 'wss://fullnode.parachain.centrifuge.io',
-    // node: 'wss://centrifuge-parachain.api.onfinality.io/ws?apikey=7f3dc170-944b-4830-9e62-863be28ac644',
     paraId: 2031,
     vestingMethod: 'vesting.vest',
     isTransferable: true,
