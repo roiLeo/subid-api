@@ -9,13 +9,14 @@ import networks from "../connections/networks"
 import axios from "axios"
 import { RelayChain } from "./crowdloan/types"
 import { FIVE_MINUTES } from "../constant"
-import registry from "@subsocial/api/utils/registry";
+import registry from "@subsocial/api/utils/registry"
+import Cache from "../cache"
 
 type ApiFn<T> = (api: ApiPromise) => Promise<T>
 type ApiWithNetworkFn<T> = (api: ApiPromise, network: string) => Promise<T>
 
 type Properties<T = any> = {
-  cache: Record<string, T>,
+  cache: Cache<T>,
   needUpdate?: () => boolean
 }
 
@@ -38,13 +39,7 @@ export const toGenericAccountId = (account?: string) =>
     ? new GenericAccountId(registry, account).toString()
     : ''
 
-  export async function getFromSelectedNetwork<T = any>(apis: Apis, getData: ApiFn<T>, network: RelayChain, props?: Properties<T>) {
-    if (!props) {
-      props = {
-        cache: {}
-      }
-    }
-  
+  export async function getFromSelectedNetwork<T = any, E = any>(apis: Apis, getData: ApiFn<T>, network: RelayChain, props?: Properties<E>) {  
     const { cache, needUpdate } = props
   
     const forceUpdate = (needUpdate && needUpdate())
@@ -53,59 +48,55 @@ export const toGenericAccountId = (account?: string) =>
   
     if (isEmptyObj(cacheData) || forceUpdate) {
       try {
-        cache[network] = await getData(apis[network])
+        const data = await getData(apis[network])
+
+        cache.set(network, data)
       } catch (err) {
         log.warn(getFromSelectedNetwork.name, err)
       }
     }
   
-    return cache
+    return cache.getAllValues()
   }
 
 // TODO: combine with getFromSelectedNetwork
-export async function getInterestedAccountsFromSelectedNetwork<T = any>(apis: Apis, getData: ApiFn<T>, network: RelayChain, offset: number, limit: number, props?: Properties<T>) {
-  if (!props) {
-    props = {
-      cache: {}
-    }
-  }
-
+export async function getInterestedAccountsFromSelectedNetwork<T = any, E = any>(apis: Apis, getData: ApiFn<T>, network: RelayChain, offset: number, limit: number, props?: Properties<E>) {
   const { cache, needUpdate } = props
 
   const forceUpdate = (needUpdate && needUpdate())
 
-  const cacheData = cache
+  const cacheData = cache.get(network)
 
   if (isEmptyObj(cacheData) || forceUpdate) {
     try {
-      cache['accounts'] = await getData(apis[network])
+      const data = await getData(apis[network])
+
+      cache.set(network, data)
+
     } catch (err) {
       log.warn(getFromSelectedNetwork.name, err)
     }
   }
 
-  if(Array.isArray(cache['accounts'])){
-    return (cache['accounts']).slice(offset, offset + limit)
+  const updatedCacheData = cache.get(network)
+
+  if(Array.isArray(updatedCacheData)){
+    return updatedCacheData.slice(offset, offset + limit)
   }
-  return cache
+  return updatedCacheData
 }
 
-export async function getFromAllNetworks<T = any>(apis: Apis, getData: ApiWithNetworkFn<T>, props?: Properties<T>) {
-  if (!props) {
-    props = {
-      cache: {}
-    }
-  }
-
+export async function getFromAllNetworks<T = any, E = any>(apis: Apis, getData: ApiWithNetworkFn<T>, props?: Properties<E>) {
   const { cache, needUpdate } = props
 
   const forceUpdate = (needUpdate && needUpdate())
 
   const promises = Object.entries(networks).map(async ([network]) => {
-    const cacheData = cache[network]
+    const cacheData = cache.get(network)
 
     if (!cacheData || forceUpdate) {
-      cache[network] = await getData(apis[network], network)
+      const data: T = await getData(apis[network], network)
+      cache.set(network, data)
     }
   })
 
@@ -113,7 +104,7 @@ export async function getFromAllNetworks<T = any>(apis: Apis, getData: ApiWithNe
     log.warn(getFromAllNetworks.name, err)
   })
 
-  return cache
+  return cache.getAllValues()
 }
 
 export const fieldsToString = (fields?: Record<string, any>): Record<string, any> | undefined => {
@@ -171,22 +162,3 @@ export const axiosGetRequest = async (url: string) => {
     return undefined
   }
 }
-
-let lastUpdate = {
-  polkadot: new Date().getTime(),
-  kusama: new Date().getTime()
-}
-const updateDelay = FIVE_MINUTES
-
-const needUpdate = (chain: RelayChain) => {
-  const now = new Date().getTime()
-
-  if (now > lastUpdate[chain] + updateDelay) {
-    lastUpdate[chain] = now
-    return true
-  }
-
-  return false
-}
-
-export const needUpdateForRelayChain = (relayChain) => needUpdate(relayChain)

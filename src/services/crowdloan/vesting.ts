@@ -18,9 +18,9 @@ type VestingData = {
 type MappedVestingData = { [key: string]: VestingData }
 
 const crowdloanVestingCache: {
-  // key: `${address}-${networkName}`
   [key: string]: VestingData & { lastUpdate: number }
 } = {}
+
 const updateDelay = FIVE_MINUTES
 const needUpdate = (lastUpdate: number) => {
   const now = new Date().getTime()

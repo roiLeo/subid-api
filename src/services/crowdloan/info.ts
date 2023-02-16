@@ -8,22 +8,9 @@ import { stringToU8a, u8aConcat } from '@polkadot/util'
 import { ONE_HOUR } from '../../constant'
 import { AnyId } from '@subsocial/api/types'
 import registry from '@subsocial/api/utils/registry'
+import Cache from '../../cache'
 
-const crowdloanInfo = {}
-
-let lastUpdate = new Date().getTime()
-const updateDelay = ONE_HOUR
-
-const needUpdate = () => {
-  const now = new Date().getTime()
-
-  if (now > lastUpdate + updateDelay) {
-    lastUpdate = now
-    return true
-  }
-
-  return false
-}
+const crowdloanInfo = new Cache(ONE_HOUR)
 
 export interface WinnerData {
   accountId: string
@@ -130,12 +117,15 @@ export const getCrowdloansByRelayChain = async ({ relayChain, apis }: GetCrowdlo
   const parachains = parachainsTupleByRelayChain[relayChain]
   const paraIds = parachains.map(([, { paraId }]) => paraId.toString())
 
+  const needUpdate = crowdloanInfo.needUpdate
   const forceUpdate = needUpdate && needUpdate()
-  const cacheData = crowdloanInfo[relayChain]
+
+  const cacheData = crowdloanInfo.get(relayChain)
 
   if (!cacheData || forceUpdate) {
-    crowdloanInfo[relayChain] = await fetchCrowdloansInfo(api, paraIds)
+    const data = await fetchCrowdloansInfo(api, paraIds)
+    crowdloanInfo.set(relayChain, data)
   }
 
-  return crowdloanInfo?.[relayChain] || []
+  return crowdloanInfo.get(relayChain) || []
 }
