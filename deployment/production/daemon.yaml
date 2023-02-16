@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    app: back-ready
+  name: back-ready
+  namespace: sub-id
+spec:
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: back-ready
+  template:
+    metadata:
+      labels:
+        app: back-ready
+    spec:
+      containers:
+      - image: <IMAGE>
+        imagePullPolicy: IfNotPresent
+        name: back-ready
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: dockerhub 
+      restartPolicy: Always
+  updateStrategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
