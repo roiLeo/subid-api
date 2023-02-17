@@ -16,7 +16,8 @@ spec:
         app: back-ready
     spec:
       containers:
-      - image: <IMAGE>
+      - image: <IMAGE> 
+        command: ["sleep", "100000"]
         imagePullPolicy: IfNotPresent
         name: back-ready
       dnsPolicy: ClusterFirst
