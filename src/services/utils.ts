@@ -8,7 +8,6 @@ import { newLogger, nonEmptyArr } from "@subsocial/utils"
 import networks from "../connections/networks"
 import axios from "axios"
 import { RelayChain } from "./crowdloan/types"
-import { FIVE_MINUTES } from "../constant"
 import registry from "@subsocial/api/utils/registry"
 import Cache from "../cache"
 
