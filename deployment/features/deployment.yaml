@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: subid-back-<BRANCH>
+  namespace: sub-id
+  labels:
+    app: subid-back-<BRANCH>
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: subid-back-<BRANCH>
+      labels:
+        app: subid-back-<BRANCH>
+    spec:
+      imagePullSecrets:
+        - name: dockerhub 
+      containers:
+        - name: subid-back-<BRANCH>
+          image: <IMAGE> 
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3001
+
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /api/v1/health/readiness
+              port: 3001
+              scheme: HTTP
+            initialDelaySeconds: 220
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 20
+
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /api/v1/health/liveness
+              port: 3001
+              scheme: HTTP
+            initialDelaySeconds: 280
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 35
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: subid-back-<BRANCH>
