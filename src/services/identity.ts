@@ -9,6 +9,7 @@ import { pick } from 'lodash'
 import { gql } from 'graphql-request'
 import { encodeAddress } from '@polkadot/util-crypto'
 import { subsocialGraphQlClient } from '../constant/graphQlClients'
+import Cache from '../cache'
 
 
 const updateDelay = 24 * 3600 * 1000 //seconds
