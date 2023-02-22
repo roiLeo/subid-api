@@ -1,13 +1,12 @@
 import { MemberDataProps } from '../types'
-import { getInterestedAccountsFromSelectedNetwork, needUpdateForRelayChain } from '../utils'
+import { getInterestedAccountsFromSelectedNetwork } from '../utils'
 import { ApiPromise } from '@polkadot/api'
 import { GenericAccountId } from '@polkadot/types'
-import registry from "@subsocial/api/utils/registry";
+import registry from "@subsocial/api/utils/registry"
+import Cache from '../../cache'
+import { FIVE_MINUTES } from '../../constant/index';
 
-const validators = {
-  polkadot: {},
-  kusama: {}
-}
+const validators = new Cache<Record<'polkadot' | 'kusama', any>>(FIVE_MINUTES)
 
 const getValidators = async (api: ApiPromise) => {
   if(!api) return []
@@ -29,7 +28,7 @@ export const getValidatorsFromRelayChain = async ({
   limit
 }: MemberDataProps) => {
   return getInterestedAccountsFromSelectedNetwork(apis, getValidators, relayChain, offset, limit, {
-    cache: validators[relayChain],
-    needUpdate: () => needUpdateForRelayChain(relayChain)
+    cache: validators,
+    needUpdate: validators.needUpdate
   })
 }
