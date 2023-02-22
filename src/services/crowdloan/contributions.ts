@@ -1,28 +1,18 @@
 import { u8aToHex } from '@polkadot/util'
 import { decodeAddress, encodeAddress } from '@polkadot/util-crypto'
 import { newLogger } from '@subsocial/utils'
-import { gql, GraphQLClient } from 'graphql-request'
+import { gql } from 'graphql-request'
 import { ApiPromise } from '../../connections/networks/types'
 import { WithApis } from '../types'
 import { isApiConnected } from '../utils'
 import { parachainsTupleByRelayChain, RelayChain } from './types'
+import { contributionsClientByRelay } from '../../constant/graphQlClients'
 
 const log = newLogger('CrowdloanContributions')
 
 type GetBalancesByIdProps = WithApis & {
   account: string,
   relayChain: RelayChain
-}
-
-const clientByRelay: Record<RelayChain, { client: GraphQLClient; addressPrefix: number }> = {
-  kusama: {
-    client: new GraphQLClient('https://squid.subsquid.io/kusama-explorer/graphql'),
-    addressPrefix: 2
-  },
-  polkadot: {
-    client: new GraphQLClient('https://squid.subsquid.io/polkadot-explorer/graphql'),
-    addressPrefix: 0
-  }
 }
 
 const getContributionsByAccountQuery = gql`
@@ -62,7 +52,7 @@ type ContributionsResult = { contributions: ContributionsData[] }
 
 export const getContributionsByAccountInNetwork = async ({ account, chainSS58, relayChain }: GetContributionsByAccountInNetworkProps) => {
   try {
-    const { addressPrefix, client } = clientByRelay[relayChain] || {}
+    const { addressPrefix, client } = contributionsClientByRelay[relayChain] || {}
     const variables = {
       account: encodeAddress(account, chainSS58 || addressPrefix),
     }

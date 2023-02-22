@@ -17,3 +17,5 @@ export const VALIDATOR_STAKING_REWARDS_API_KEY = 'f00511ab0c5e422796b8f5d9c7029f
 export const ONFINALITY_API_KEY = '7f3dc170-944b-4830-9e62-863be28ac644'
 
 export const SUBSOCIAL_GRAPHQL_CLIENT = 'https://squid.subsquid.io/subsocial/graphql'
+
+export const QUARTZ_GRAPHQL_CLIENT = 'https://hasura-quartz.unique.network/v1/graphql'

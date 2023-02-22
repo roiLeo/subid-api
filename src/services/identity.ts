@@ -1,4 +1,4 @@
-import { WithApis, SubsocialProfilesResult } from './types';
+import { WithApis, SubsocialProfilesResult } from './types'
 import { runQueryOrUndefined, toGenericAccountId } from './utils'
 import { Registration } from '@polkadot/types/interfaces'
 import { hexToString } from '@polkadot/util'
@@ -6,11 +6,9 @@ import { ApiPromise } from '../connections/networks/types'
 import { Option } from '@polkadot/types'
 import { isEmptyArray, isEmptyObj } from '@subsocial/utils'
 import { pick } from 'lodash'
-import { GraphQLClient, gql } from 'graphql-request'
-import { SUBSOCIAL_GRAPHQL_CLIENT } from '../constant/index'
+import { gql } from 'graphql-request'
 import { encodeAddress } from '@polkadot/util-crypto'
-
-const subsocialGraphQlClient = new GraphQLClient(SUBSOCIAL_GRAPHQL_CLIENT)
+import { subsocialGraphQlClient } from '../constant/graphQlClients'
 
 const identitiesInfo = {}
 
