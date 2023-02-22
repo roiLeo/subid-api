@@ -1,14 +1,11 @@
 import { ApiPromise } from '@polkadot/api'
 import { encodeAddress } from '@polkadot/util-crypto'
-import { GraphQLClient, gql } from 'graphql-request'
+import { gql } from 'graphql-request'
 import { newLogger } from '@subsocial/utils'
 import { isApiConnected } from '../utils'
+import { quartzClient } from '../../constant/graphQlClients'
 
 const log = newLogger('UniqueNft')
-
-const quartzGraphqlUrl = 'https://hasura-quartz.unique.network/v1/graphql'
-
-const client = new GraphQLClient(quartzGraphqlUrl)
 
 const getNftsByAccountQuery = gql`
   query getNftsByAccount($account: String!) {
@@ -42,7 +39,7 @@ const parseCollectionRes = (data) => data.collections[0]
 
 const getCollectionById = async (id: number) => {
   if (!collectionById[id]) {
-    collectionById[id] = parseCollectionRes(await client.request(getCollectionByIdQuery, { id }))
+    collectionById[id] = parseCollectionRes(await quartzClient.request(getCollectionByIdQuery, { id }))
   }
 
   return collectionById[id]
@@ -80,7 +77,7 @@ export const getQuartzNftsByAccount = async (api: ApiPromise, account: string) =
       account: encodeAddress(account, api.registry.chainSS58),
     }
 
-    const { tokens } = await client.request(getNftsByAccountQuery, variables)
+    const { tokens } = await quartzClient.request(getNftsByAccountQuery, variables)
     const nfts = tokens as QuartzNft[]
     const collectionIds = nfts.map(x => x.collection_id)
     const collectionById = await getCollectionsByIds(collectionIds)

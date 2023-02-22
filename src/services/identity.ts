@@ -6,12 +6,11 @@ import { ApiPromise } from '../connections/networks/types'
 import { Option } from '@polkadot/types'
 import { isEmptyArray, isEmptyObj, isDef } from '@subsocial/utils'
 import { pick } from 'lodash'
-import { GraphQLClient, gql } from 'graphql-request'
-import { SUBSOCIAL_GRAPHQL_CLIENT } from '../constant/index'
+import { gql } from 'graphql-request'
 import { encodeAddress } from '@polkadot/util-crypto'
-import Cache from '../cache';
+import { subsocialGraphQlClient } from '../constant/graphQlClients'
+import Cache from '../cache'
 
-const subsocialGraphQlClient = new GraphQLClient(SUBSOCIAL_GRAPHQL_CLIENT)
 
 const updateDelay = 24 * 3600 * 1000 //seconds
 const identitiesInfoCache = new Cache(updateDelay)
