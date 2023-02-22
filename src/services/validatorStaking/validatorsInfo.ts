@@ -8,22 +8,9 @@ import type {
   DeriveStakingElected,
   DeriveStakingWaiting,
 } from '@polkadot/api-derive/types'
+import Cache from '../../cache'
 
-const validatorStakingInfo = {}
-
-let lastUpdate = new Date().getTime()
-const updateDelay = FIVE_MINUTES //seconds
-
-const needUpdate = () => {
-  const now = new Date().getTime()
-
-  if (now > lastUpdate + updateDelay) {
-    lastUpdate = now
-    return true
-  }
-
-  return false
-}
+const validatorStakingInfo = new Cache(FIVE_MINUTES)
 
 /// https://github.dev/polkadot-js/apps/blob/fb8f7fe86b2945fcc71dcd11c67ebeeab35ee37e/packages/page-staking/src/useSortedTargets.ts#L120-L121
 const parseValidatorStakingInfo = (
@@ -141,14 +128,14 @@ function mergeValidatorsInfo(
 }
 
 export const getValidatorsData = async (api: any, network: string) => {
-  const cacheData = validatorStakingInfo[network]
+  const cacheData = validatorStakingInfo.get(network)
 
   if(cacheData?.loading) return
 
-  validatorStakingInfo[network] = {
+  validatorStakingInfo.set(network, {
     ...cacheData,
     loading: true
-  }
+  })
   
   const electedInfo = await api.derive.staking.electedInfo()
   const waitingInfo = await api.derive.staking.waitingInfo()
@@ -163,10 +150,10 @@ export const getValidatorsData = async (api: any, network: string) => {
     ...baseInfo
   }
 
-  validatorStakingInfo[network] = {
+  validatorStakingInfo.set(network, {
     info,
     loading: false
-  }
+  })
 }
 
 export const getValidatorsList = async ({ apis, network }: ValidatorStakingProps) => {
@@ -174,12 +161,14 @@ export const getValidatorsList = async ({ apis, network }: ValidatorStakingProps
 
   if (!api) return []
 
+  const needUpdate = validatorStakingInfo.needUpdate
+
   const forceUpdate = needUpdate && needUpdate()
-  const cacheData = validatorStakingInfo[network]
+  const cacheData = validatorStakingInfo.get(network)
 
   if (!cacheData || forceUpdate) {
     getValidatorsData(api, network)
   }
 
-  return validatorStakingInfo[network]?.info || {}
+  return validatorStakingInfo.get(network)?.info || {}
 }

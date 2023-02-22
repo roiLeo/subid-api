@@ -1,26 +1,9 @@
 import { ONE_HOUR } from '../../constant/index'
-import { newLogger } from '@subsocial/utils'
-import { ValidatorStakingProperties, ValidatorStakingProps } from './types';
-
-const stakingPropertiesCache: Record<string, ValidatorStakingProperties> = {}
-
-const log = newLogger('Get validator staking props')
-
-let lastUpdate = new Date().getTime()
+import { ValidatorStakingProperties, ValidatorStakingProps } from './types'
+import Cache from '../../cache';
 
 const updateDelay = 7 * 24 * ONE_HOUR
-
-const needUpdate = () => {
-  const now = new Date().getTime()
-
-  if (now > lastUpdate + updateDelay) {
-    log.debug('Update validator staking props')
-    lastUpdate = now
-    return true
-  }
-
-  return false
-}
+const stakingPropertiesCache = new Cache<Record<string, ValidatorStakingProperties>>(updateDelay)
 
 export const getCurrentEra = async ({ apis, network }: ValidatorStakingProps) => {
   const api = apis[network]
@@ -37,8 +20,10 @@ export const getStakingProps = async ({ apis, network }: ValidatorStakingProps):
 
   if (!api) return {}
 
+  const needUpdate = stakingPropertiesCache.needUpdate
+
   const forceUpdate = needUpdate && needUpdate()
-  const cacheData = stakingPropertiesCache[network]
+  const cacheData = stakingPropertiesCache.get(network)
 
   if (!cacheData || forceUpdate) {
 
@@ -61,8 +46,8 @@ export const getStakingProps = async ({ apis, network }: ValidatorStakingProps):
       maxNominatorRewardedPerValidator
     }
 
-    stakingPropertiesCache[network] = stakingProps
+    stakingPropertiesCache.set(network, stakingProps)
   }
 
-  return stakingPropertiesCache[network]
+  return stakingPropertiesCache.get(network)
 }

@@ -1,4 +1,4 @@
-import { newLogger, isEmptyObj } from '@subsocial/utils'
+import { isEmptyObj } from '@subsocial/utils'
 import networks from '../connections/networks'
 import { WithApis } from './types'
 import { getFromAllNetworks, isApiConnected } from './utils'
@@ -8,7 +8,11 @@ import { getDefaultAssetRegistry } from './assetRegistry/acalaDefaultRegistry'
 import { ONE_HOUR } from '../constant'
 import { commonAssetRegistries } from './assetRegistry/common'
 import { NetworkBaseInfo } from '../connections/networks/types'
-const log = newLogger('Get properties')
+import Cache from '../cache'
+
+type ChainsInfo = Record<string, ChainProperty>
+const chainPropertiesCache = new Cache<ChainsInfo>(ONE_HOUR)
+
 
 export type ChainProperty = NetworkBaseInfo &
   Partial<{
@@ -20,25 +24,9 @@ export type ChainProperty = NetworkBaseInfo &
     totalIssuance: string
     existentialDeposit: string
   }>
-const chainProperties: { [key: string]: ChainProperty } = {}
-
+  
 export function getCachedChainProperties (chain: string): ChainProperty | undefined {
-  return chainProperties[chain]
-}
-
-let lastUpdate = new Date().getTime()
-const updateDelay = ONE_HOUR
-
-const needUpdate = () => {
-  const now = new Date().getTime()
-
-  if (now > lastUpdate + updateDelay) {
-    log.debug('Update properties')
-    lastUpdate = now
-    return true
-  }
-
-  return false
+  return chainPropertiesCache.get(chain)
 }
 
 const customFetchAssetsRegistryByNetwork = {
@@ -118,18 +106,23 @@ const getPropertiesByNetwork = async (api: ApiPromise, network: string): Promise
 export const updatePropertiesByNetwork = async (api: ApiPromise, network: string) => {
   const propertiesByNetwork = await getPropertiesByNetwork(api, network)
 
-  chainProperties[network] = propertiesByNetwork
+  chainPropertiesCache[network] = propertiesByNetwork
 }
 
 
 export const getOrUpdatePropertiesByNetwork = async (api: ApiPromise, network: string) => {
-  if(isEmptyObj(chainProperties[network])) {
+  if(isEmptyObj(chainPropertiesCache[network])) {
     await updatePropertiesByNetwork(api, network)
   }
 
-  return chainProperties[network]
+  return chainPropertiesCache[network]
 }
 
 export const getNetworksProperties = async ({ apis }: WithApis) => {
-  return getFromAllNetworks(apis, getPropertiesByNetwork, { cache: chainProperties, needUpdate })
+  chainPropertiesCache.set
+  return getFromAllNetworks(
+    apis, 
+    getPropertiesByNetwork, 
+    { cache: chainPropertiesCache, needUpdate: chainPropertiesCache.needUpdate }
+  )
 }

@@ -1,0 +1,41 @@
+name: Delete feature
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  delete:
+    if: github.event.pull_request.merged == true       
+    name: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v3
+ 
+      - uses: mdecoleman/pr-branch-name@1.2.0
+        id: vars
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract branch name
+        shell: bash
+        run: echo "name=$(echo ${{ steps.vars.outputs.branch }} | sed 's/^deploy\///')" >> $GITHUB_ENV        
+        id: extract_branch
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN_STAGING }}
+
+      - name: remove previous feature
+        continue-on-error: true        
+        run: |
+          doctl kubernetes cluster kubeconfig save --expiry-seconds 600 c7e84602-9029-40ed-9f95-6c113f6693ee
+          NAME=${{ env.name }} && sed -i 's|<BRANCH>|'${NAME}'|' $GITHUB_WORKSPACE/deployment/features/all.yaml
+          NAME=${{ env.name }} && sed -i 's|<BRANCH>|'${NAME}'|' $GITHUB_WORKSPACE/deployment/features/deployment.yaml
+          kubectl delete -f $GITHUB_WORKSPACE/deployment/features/back/
+          
+      - name: final task
+        if: always()
+        run: echo "finished successfully"

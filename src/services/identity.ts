@@ -4,27 +4,15 @@ import { Registration } from '@polkadot/types/interfaces'
 import { hexToString } from '@polkadot/util'
 import { ApiPromise } from '../connections/networks/types'
 import { Option } from '@polkadot/types'
-import { isEmptyArray, isEmptyObj } from '@subsocial/utils'
+import { isEmptyArray, isEmptyObj, isDef } from '@subsocial/utils'
 import { pick } from 'lodash'
 import { gql } from 'graphql-request'
 import { encodeAddress } from '@polkadot/util-crypto'
 import { subsocialGraphQlClient } from '../constant/graphQlClients'
 
-const identitiesInfo = {}
 
-let lastUpdate = new Date().getTime()
 const updateDelay = 24 * 3600 * 1000 //seconds
-
-const needUpdate = () => {
-  const now = new Date().getTime()
-
-  if (now > lastUpdate + updateDelay) {
-    lastUpdate = now
-    return true
-  }
-
-  return false
-}
+const identitiesInfoCache = new Cache(updateDelay)
 
 type Field = {
   raw: string
@@ -55,8 +43,10 @@ const parseIdentity = (
   identities?: Option<any>[]
 ) => {
   if (!identities) return undefined
+  const identityByChain = identitiesInfoCache.get(chain)
 
   const parsedIdentities = {}
+  const identityByAccount = {}
 
   identities?.forEach((identityOpt, i) => {
     const identity = identityOpt.unwrapOr(undefined) as Registration | undefined
@@ -90,7 +80,7 @@ const parseIdentity = (
     const identity = parsedIdentities[toGenericAccountId(genericAccountId)] || {}
 
     if (!isEmptyObj(identity)) {
-      identitiesInfo[chain][genericAccountId] = identity
+      identityByAccount[genericAccountId] = identity
       return
     }
 
@@ -104,25 +94,27 @@ const parseIdentity = (
 
     if (isEmptyObj(parentIdentity)) return
 
-    identitiesInfo[chain][genericAccountId] = {
+    identityByAccount[genericAccountId] = {
       info: {
         display: `${parentIdentity.info.display}/${superOf.raw}`
       }
     }
   })
+
+  identitiesInfoCache.set(chain, { ...identityByChain, ...identityByAccount })
 }
 
 const getIdentity = async (api: ApiPromise, accounts: string[], chain: string) => {
+  const needUpdate = identitiesInfoCache.needUpdate
+
   const forceUpdate = needUpdate && needUpdate()
-  const cacheDataByChain = identitiesInfo?.[chain]
+  const cacheDataByChain = identitiesInfoCache.get(chain)
 
+  const cachedDataKeys = cacheDataByChain ? Object.keys(cacheDataByChain) : []
+  
   const needFetch = cacheDataByChain
-    ? accounts.filter((account) => !Object.keys(cacheDataByChain).includes(account))
-    : []
-
-  if (!cacheDataByChain) {
-    identitiesInfo[chain] = {}
-  }
+  ? accounts.filter((account) => !cachedDataKeys.includes(account))
+  : accounts
 
   if (!isEmptyArray(needFetch)) {
     const accountsToFetch = forceUpdate ? accounts : needFetch
@@ -150,13 +142,13 @@ const getIdentity = async (api: ApiPromise, accounts: string[], chain: string) =
 
     const accountsWithSubIdentity = [...accountsToFetch, ...parentIds]
 
-    const identities = (await api.query.identity.identityOf.multi(
-      accountsWithSubIdentity
-    )) as Option<any>[]
+    const identities = (await api.query.identity.identityOf.multi(accountsWithSubIdentity)) as Option<any>[]
     parseIdentity(chain, accountsToFetch, accountsWithSubIdentity, superOfMultiObj, identities)
   }
 
-  const result = pick(identitiesInfo[chain], accounts)
+  const updatedIdentityInfo = identitiesInfoCache.get(chain)
+
+  const result = pick(updatedIdentityInfo, accounts)
 
   return result
 }
@@ -215,15 +207,16 @@ export const getIdentities = async ({
 }: GetIdentitiesProps) => {
   const identities = {}
 
+  const filteredAccounts = accounts.filter(account => isDef(account) && !!account)
 
   const [kusamaIdentity, polkadotIdentity, shidenIdentity, subsocialIdentity] = await Promise.all([
-    runQueryOrUndefined(kusama, async (api) => getIdentity(api, accounts, 'kusama')),
-    runQueryOrUndefined(polkadot, async (api) => getIdentity(api, accounts, 'polkadot')),
-    runQueryOrUndefined(shiden, async (api) => getIdentity(api, accounts, 'shiden')),
-    getSubsococilaIdentity(accounts)
+    runQueryOrUndefined(kusama, async (api) => getIdentity(api, filteredAccounts, 'kusama')),
+    runQueryOrUndefined(polkadot, async (api) => getIdentity(api, filteredAccounts, 'polkadot')),
+    runQueryOrUndefined(shiden, async (api) => getIdentity(api, filteredAccounts, 'shiden')),
+    getSubsococilaIdentity(filteredAccounts)
   ])
 
-  accounts.forEach((account) => {
+  filteredAccounts.forEach((account) => {
     identities[account] = {
       kusama: kusamaIdentity?.[account],
       polkadot: polkadotIdentity?.[account],

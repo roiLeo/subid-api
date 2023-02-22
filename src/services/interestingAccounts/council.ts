@@ -1,11 +1,10 @@
 import { MemberDataProps } from '../types'
-import { getInterestedAccountsFromSelectedNetwork, needUpdateForRelayChain } from '../utils'
+import { getInterestedAccountsFromSelectedNetwork } from '../utils'
 import { ApiPromise } from '@polkadot/api'
+import { FIVE_MINUTES } from '../../constant/index'
+import Cache from '../../cache'
 
-const councilMembers = {
-  polkadot: {},
-  kusama: {}
-}
+const councilMembers = new Cache<Record<'polkadot' | 'kusama', any>>(FIVE_MINUTES)
 
 const getCouncilMembers = async (api: ApiPromise) => {
   if(!api) return []
@@ -25,8 +24,12 @@ export const getCouncilMembersByRelayChain = async ({
   offset,
   limit
 }: MemberDataProps) => {
-  return getInterestedAccountsFromSelectedNetwork(apis, getCouncilMembers, relayChain, offset, limit, {
-    cache: councilMembers[relayChain],
-    needUpdate: () => needUpdateForRelayChain(relayChain)
-  })
+  return getInterestedAccountsFromSelectedNetwork(
+    apis,
+    getCouncilMembers, 
+    relayChain, 
+    offset, 
+    limit, 
+    { cache: councilMembers, needUpdate: councilMembers.needUpdate}
+  )
 }
