@@ -31,13 +31,13 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3001
-              #          resources:
-              #            requests:
-              #              memory: "90Mi"
-              #              cpu: "0.1m"
-              #            limits:
-              #              memory: "1300Mi"
-              #              cpu: "1.5m"              
+          resources:
+            requests:
+              memory: "1500Mi"
+              cpu: "750m"
+            limits:
+              memory: "4300Mi"
+              cpu: "2"
 
           readinessProbe:
             failureThreshold: 3
