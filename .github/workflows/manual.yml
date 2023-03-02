@@ -27,6 +27,9 @@ jobs:
       - name: Update deploy file
         run: TAG=${{ env.name }}-$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|dappforce/subid-backend:'${TAG}'|' $GITHUB_WORKSPACE/deployment/production/deploy.yaml
 
+      - name: Remove hpa 
+        run: kubectl -n sub-id delete hpa subid-back
+        
       - name: Deploy to DigitalOcean Kubernetes
         run: kubectl apply -f $GITHUB_WORKSPACE/deployment/production/deploy.yaml
 
@@ -34,4 +37,4 @@ jobs:
         run: kubectl -n sub-id rollout status deployment/subid-back
 
       - name: add replicas
-        run: kubectl -n sub-id scale deployment/subid-back --replicas=3
+        run: kubectl create -f $GITHUB_WORKSPACE/deployment/hpa/hpa.yaml
