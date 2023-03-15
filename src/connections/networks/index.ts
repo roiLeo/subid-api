@@ -1,5 +1,5 @@
 import { Networks } from './types'
-import { getBitfrostApi, resolveOnfinalityUrl } from './utils';
+import { getBitfrostApi, resolveOnfinalityUrl } from './utils'
 import { RelayChain } from '../../services/crowdloan/types'
 
 export const subsocial = {
@@ -27,14 +27,14 @@ export const standalones: Networks = {
   sora: {
     name: 'SORA',
     icon: 'sora-substrate.svg',
-    node: 'wss://mof2.sora.org',
+    node: resolveOnfinalityUrl('sora'),
     nativeToken: 'XOR',
     isTransferable: true
   },
   edgeware: {
     name: 'Edgeware',
     icon: 'edgeware-circle.svg',
-    node: 'wss://edgeware.jelliedowl.net'
+    node: resolveOnfinalityUrl('edgeware'),
   },
   chainx: {
     name: 'ChainX',
@@ -57,12 +57,12 @@ export const standalones: Networks = {
   polkadex: {
     name: 'Polkadex',
     icon: 'polkadex.svg',
-    node: 'wss://mainnet.polkadex.trade'
+    node: resolveOnfinalityUrl('polkadex'),
   },
   crust: {
     name: 'Crust',
     icon: 'crust.svg',
-    node: 'wss://crust.api.onfinality.io/public-ws',
+    node: resolveOnfinalityUrl('crust'),
   }
 }
 
@@ -81,7 +81,7 @@ export const kusamaParachains: Networks = {
   },
   altair: {
     name: 'Altair',
-    node: 'wss://fullnode.altair.centrifuge.io',
+    node: resolveOnfinalityUrl('altair'),
     icon: 'altair.svg',
     paraId: 2088,
     vestingMethod: 'vesting.vest',
@@ -108,7 +108,7 @@ export const kusamaParachains: Networks = {
   },
   kilt: {
     name: 'Kilt Spiritnet',
-    node: 'wss://spiritnet.kilt.io',
+    node: resolveOnfinalityUrl('spiritnet'),
     icon: 'kilt.png',
     paraId: 2086,
     isTransferable: true
@@ -131,7 +131,7 @@ export const kusamaParachains: Networks = {
   },
   statemine: {
     name: 'Statemine',
-    node: 'wss://statemine-rpc.polkadot.io',
+    node: resolveOnfinalityUrl('statemine'),
     icon: 'statemine.svg',
     paraId: 1000,
     isTransferable: true,
@@ -154,7 +154,7 @@ export const kusamaParachains: Networks = {
   },
   karura: {
     name: 'Karura',
-    node: 'wss://karura-rpc-0.aca-api.network',
+    node: resolveOnfinalityUrl('karura'),
     icon: 'karura.svg',
     paraId: 2000,
     isTransferable: true,
@@ -163,7 +163,7 @@ export const kusamaParachains: Networks = {
   khala: {
     name: 'Khala',
     icon: 'khala.svg',
-    node: 'wss://khala-api.phala.network/ws',
+    node: resolveOnfinalityUrl('khala'),
     paraId: 2004,
     types: {
       BridgeChainId: 'u8'
@@ -174,7 +174,7 @@ export const kusamaParachains: Networks = {
   kintsugi: {
     name: 'Kintsugi BTC',
     icon: 'kintsugi.png',
-    node: 'wss://kintsugi.api.onfinality.io/public-ws',
+    node: resolveOnfinalityUrl('kintsugi'),
     paraId: 2092,
     nativeToken: 'KINT',
     vestingMethod: 'vesting.claim',
@@ -213,7 +213,7 @@ export const kusamaParachains: Networks = {
   },
   shiden: {
     name: 'Shiden',
-    node: 'wss://rpc.shiden.astar.network',
+    node: resolveOnfinalityUrl('shiden'),
     icon: 'shiden.png',
     paraId: 2007,
     vestingMethod: 'vesting.vest',
@@ -239,7 +239,7 @@ export const kusamaParachains: Networks = {
   },
   bitCountry: {
     name: 'Bit.Country Pioneer',
-    node: 'wss://pioneer.api.onfinality.io/public-ws',
+    node: resolveOnfinalityUrl('pioneer'),
     icon: 'bitcountry.svg',
     paraId: 2096,
     vestingMethod: 'vesting.vest',
@@ -247,7 +247,7 @@ export const kusamaParachains: Networks = {
   },
   robonomics: {
     name: 'Robonomics',
-    node: 'wss://kusama.rpc.robonomics.network',
+    node: resolveOnfinalityUrl('robonomics'),
     icon: 'robonomics.svg',
     paraId: 2048,
     vestingMethod: 'vesting.vest',
@@ -255,7 +255,7 @@ export const kusamaParachains: Networks = {
   },
   quartz: {
     name: 'QUARTZ by UNIQUE',
-    node: 'wss://quartz.unique.network',
+    node: resolveOnfinalityUrl('quartz'),
     icon: 'quartz.png',
     paraId: 2095,
     vestingMethod: 'vesting.claim',
@@ -263,7 +263,7 @@ export const kusamaParachains: Networks = {
   },
   zeitgeist: {
     name: 'Zeitgeist',
-    node: 'wss://zeitgeist.api.onfinality.io/public-ws',
+    node: resolveOnfinalityUrl('zeitgeist'),
     icon: 'zeitgeist.png',
     paraId: 2101,
     vestingMethod: 'vesting.vest',
@@ -272,7 +272,7 @@ export const kusamaParachains: Networks = {
   mangata: {
     name: 'Mangata X',
     icon: 'mangata.png',
-    node: 'wss://mangata-x.api.onfinality.io/public-ws',
+    node: resolveOnfinalityUrl('mangatax'),
     disabled: true,
     nativeToken: 'MGX',
     paraId: 2110,
@@ -299,7 +299,7 @@ export const kusamaParachains: Networks = {
   'darwinia-crab-parachain': {
     name: 'Darwinia Crab Parachain',
     icon: 'crab.svg',
-    node: 'wss://crab-parachain-rpc.darwinia.network',
+    node: resolveOnfinalityUrl('darwinia-crab'),
     disabled: true,
     nativeToken: 'CRAB',
     paraId: 2105,
@@ -315,7 +315,7 @@ export const kusamaParachains: Networks = {
   'pichiu': {
     name: 'Pichiu',
     icon: 'pichiu.png',
-    node: 'wss://pichiu.api.onfinality.io/public-ws',
+    node: resolveOnfinalityUrl('pichiu-oracle'),
     disabled: true,
     nativeToken: 'PCHU',
     paraId: 2102,
@@ -357,7 +357,7 @@ export const kusamaParachains: Networks = {
   },
   invArch: {
     name: 'InvArch Tinkernet',
-    node: 'wss://invarch-tinkernet.api.onfinality.io/public-ws',
+    node: resolveOnfinalityUrl('invarch-tinkernet'),
     nativeToken: 'TNKR',
     paraId: 2125,
     icon: 'invArch.png',
@@ -374,7 +374,7 @@ export const kusamaParachains: Networks = {
   },
   bajun: {
     name: 'Bajun Network',
-    node: 'wss://bajun.api.onfinality.io/public-ws',
+    node: resolveOnfinalityUrl('bajun'),
     disabled: true,
     nativeToken: 'BAJU',
     paraId: 2119,
@@ -423,7 +423,7 @@ export const polkadotParachains: Networks = {
   },
   clover: {
     name: 'Clover Finance',
-    node: 'wss://rpc-para.clover.finance',
+    node: resolveOnfinalityUrl('clover'),
     disabled: true,
     nativeToken: 'CLV',
     icon: 'clover.svg',
@@ -432,7 +432,7 @@ export const polkadotParachains: Networks = {
   },
   astar: {
     name: 'Astar',
-    node: 'wss://rpc.astar.network',
+    node: resolveOnfinalityUrl('astar'),
     icon: 'astar.png',
     paraId: 2006,
     vestingMethod: 'vesting.vest',
@@ -441,7 +441,7 @@ export const polkadotParachains: Networks = {
   },
   litentry: {
     name: 'Litentry',
-    node: 'wss://rpc.litentry-parachain.litentry.io',
+    node: resolveOnfinalityUrl('litentry'),
     disabled: true,
     nativeToken: 'LIT',
     icon: 'litentry.png',
@@ -462,7 +462,7 @@ export const polkadotParachains: Networks = {
   },
   'parallel': {
     name: 'Parallel',
-    node: 'wss://rpc.parallel.fi',
+    node: resolveOnfinalityUrl('parallel'),
     icon: 'parallel.svg',
     paraId: 2012,
     vestingMethod: 'vesting.claim',
@@ -471,7 +471,7 @@ export const polkadotParachains: Networks = {
   },
   acala: {
     name: 'Acala',
-    node: 'wss://acala-rpc-1.aca-api.network',
+    node: resolveOnfinalityUrl('acala-polkadot'),
     icon: 'acala.svg',
     paraId: 2000,
     vestingMethod: 'vesting.claim',
@@ -492,7 +492,7 @@ export const polkadotParachains: Networks = {
   },
   efinity: {
     name: 'Efinity',
-    node: 'wss://rpc.efinity.io',
+    node: resolveOnfinalityUrl('efinity'),
     nativeToken: 'EFI',
     disabled: true,
     icon: 'efinity.svg',
@@ -502,7 +502,7 @@ export const polkadotParachains: Networks = {
   },
   composable: {
     name: 'Composable Finance',
-    node: 'wss://rpc.composable.finance',
+    node: resolveOnfinalityUrl('composable'),
     disabled: true,
     nativeToken: 'LAYR',
     icon: 'composableFinance.png',
@@ -510,7 +510,7 @@ export const polkadotParachains: Networks = {
   },
   interlay: {
     name: 'Interlay',
-    node: 'wss://api.interlay.io/parachain',
+    node: resolveOnfinalityUrl('interlay'),
     icon: 'interlay.svg',
     paraId: 2032,
     nativeToken: 'INTR',
@@ -521,7 +521,7 @@ export const polkadotParachains: Networks = {
   centrifuge: {
     name: 'Centrifuge',
     icon: 'centrifuge.png',
-    node: 'wss://fullnode.parachain.centrifuge.io',
+    node: resolveOnfinalityUrl('centrifuge-parachain'),
     paraId: 2031,
     vestingMethod: 'vesting.vest',
     isTransferable: true,
@@ -530,7 +530,7 @@ export const polkadotParachains: Networks = {
   phala: {
     name: 'Phala Network',
     icon: 'phala.svg',
-    node: 'wss://api.phala.network/ws',
+    node: resolveOnfinalityUrl('phala'),
     nativeToken: 'PHA',
     paraId: 2035,
     vestingMethod: 'vesting.vest',
@@ -539,7 +539,7 @@ export const polkadotParachains: Networks = {
   equilibrium: {
     name: 'Equilibrium',
     icon: 'equilibrium.svg',
-    node: 'wss://node.pol.equilibrium.io',
+    node: resolveOnfinalityUrl('Equilibrium'),
     disabled: true,
     nativeToken: 'EQ',
     paraId: 2011,
@@ -548,7 +548,7 @@ export const polkadotParachains: Networks = {
   'hydra-dx': {
     name: 'HydraDX',
     icon: 'snakenet.svg',
-    node: 'wss://hydradx-rpc.dwellir.com',
+    node: resolveOnfinalityUrl('hydradx'),
     paraId: 2034,
     vestingMethod: 'vesting.claim',
     isTransferable: true,
@@ -556,7 +556,7 @@ export const polkadotParachains: Networks = {
   },
   'nodle': {
     name: 'Nodle',
-    node: 'wss://nodle-parachain.api.onfinality.io/public-ws',
+    node: resolveOnfinalityUrl('nodle-parachain'),
     icon: 'nodle.svg',
     paraId: 2026,
     vestingMethod: 'vesting.claim',
@@ -571,7 +571,7 @@ export const polkadotParachains: Networks = {
   'polkadex-polkadot': {
     name: 'Polkadex',
     icon: 'polkadex.svg',
-    node: 'wss://polkadex.api.onfinality.io',
+    node: resolveOnfinalityUrl('polkadex'),
     disabled: true,
     nativeToken: 'PDEX',
     paraId: 2040,
@@ -580,7 +580,7 @@ export const polkadotParachains: Networks = {
   unique: {
     name: 'Unique Network',
     icon: 'unique.svg',
-    node: 'wss://us-ws.unique.network',
+    node: resolveOnfinalityUrl('unique'),
     disabled: true,
     nativeToken: 'UNQ',
     paraId: 2037,
