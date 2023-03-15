@@ -51,7 +51,7 @@ export const standalones: Networks = {
   'darwinia-crab': {
     name: 'Darwinia Crab',
     icon: 'crab.svg',
-    node: resolveOnfinalityUrl('darwinia-crab'),
+    node: 'wss://crab-rpc.darwinia.network',
     isTransferable: true
   },
   polkadex: {
