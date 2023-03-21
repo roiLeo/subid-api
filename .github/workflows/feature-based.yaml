@@ -1,4 +1,4 @@
-name: Backfeature based CI CD
+name: Back feature based CI CD
 on:
   workflow_dispatch:
   push:
@@ -42,7 +42,7 @@ jobs:
       - name: Build staging image
         uses: docker/build-push-action@v3
         with:
-          context: backend
+          context: .
           builder: ${{ steps.buildx.outputs.name }}
           file: docker/Dockerfile
           push: true
@@ -75,7 +75,7 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN_STAGING }}
 
       - name: Save DigitalOcean kubeconfig with short-lived credentials
-        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 c7e84602-9029-40ed-9f95-6c113f6693ee
+        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ secrets.K8S_STAGING }}
 
       - name: Update docker image name
         run: TAG=${{ env.name }}-$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|dappforce/subid-backend:'${TAG}'|' $GITHUB_WORKSPACE/deployment/features/deployment.yaml
@@ -87,7 +87,7 @@ jobs:
         run: NAME=${{ env.name }} && sed -i 's|<BRANCH>|'${NAME}'|' $GITHUB_WORKSPACE/deployment/features/deployment.yaml
 
       - name: Deploy to DigitalOcean Kubernetes
-        run: kubectl apply -f $GITHUB_WORKSPACE/deployment/features/back/
+        run: kubectl apply -f $GITHUB_WORKSPACE/deployment/features/
 
       - name: Verify deployment
         run: NAME=${{ env.name }} && kubectl -n sub-id rollout status deployment/subid-back-${NAME}
