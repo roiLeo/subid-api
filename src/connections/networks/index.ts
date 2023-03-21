@@ -24,6 +24,11 @@ export const standalones: Networks = {
     icon: 'polkadot.svg',
     isTransferable: true
   },
+  rococo: {
+    name: 'Rococo',
+    node: 'wss://rococo-rpc.polkadot.io',
+    icon: ''
+  },
   sora: {
     name: 'SORA',
     icon: 'sora-substrate.svg',
