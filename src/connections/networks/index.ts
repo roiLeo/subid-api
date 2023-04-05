@@ -14,13 +14,13 @@ export const subsocial = {
 export const standalones: Networks = {
   kusama: {
     name: 'Kusama',
-    node: resolveOnfinalityUrl('kusama'),
+    node: 'wss://kusama.api.onfinality.io/public-ws', // resolveOnfinalityUrl('kusama'),
     icon: 'kusama.svg',
     isTransferable: true
   },
   polkadot: {
     name: 'Polkadot',
-    node: resolveOnfinalityUrl('polkadot'),
+    node: 'wss://polkadot.api.onfinality.io', // resolveOnfinalityUrl('polkadot'),
     icon: 'polkadot.svg',
     isTransferable: true
   },
