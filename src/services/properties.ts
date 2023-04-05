@@ -52,6 +52,7 @@ const customFetchAssetsRegistryByNetwork = {
   parallelHeiko: commonAssetRegistries['assets.metadata'],
   phala: commonAssetRegistries['assets.metadata'],
   khala: commonAssetRegistries['assets.metadata'],
+  pendulum: async () => ({ DOT: { currency: 0, symbol: 'DOT', decimals: 10 } })
 
 }
 
