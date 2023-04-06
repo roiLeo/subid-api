@@ -59,6 +59,9 @@ const customOrmlTokenGetter = asTypesGenerator<
   },
   'ormlTokens.accounts': (api, { account, token }) => {
     return api.query.ormlTokens.accounts(account, token) as any
+  },
+  'tokens.accounts': (api, { account, token }) => {
+    return api.query.tokens.accounts(account, { XCM: token }) as any
   }
 })
 const ormlTokenGetterNetworkMapper: { [key: string]: keyof typeof customOrmlTokenGetter } = {
@@ -78,6 +81,7 @@ const ormlTokenGetterNetworkMapper: { [key: string]: keyof typeof customOrmlToke
   altair: 'ormlTokens.accounts',
   centrifuge: 'ormlTokens.accounts',
   shadow: 'ormlTokens.accounts',
+  pendulum: 'tokens.accounts'
 }
 
 const getOrmlTokens: GetBalancesType = async (api, network, account, tokens) => {
