@@ -31,13 +31,13 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3001
-              #          resources:
-              #            requests:
-              #              memory: "90Mi"
-              #              cpu: "0.1m"
-              #            limits:
-              #              memory: "1300Mi"
-              #              cpu: "1.5m"              
+          resources:
+            requests:
+              memory: "1500Mi"
+              cpu: "750m"
+            limits:
+              memory: "4300Mi"
+              cpu: "2"
 
           readinessProbe:
             failureThreshold: 3
@@ -45,7 +45,7 @@ spec:
               path: /api/v1/health/readiness
               port: 3001
               scheme: HTTP
-            initialDelaySeconds: 220
+            initialDelaySeconds: 150
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 20
@@ -56,7 +56,7 @@ spec:
               path: /api/v1/health/liveness
               port: 3001
               scheme: HTTP
-            initialDelaySeconds: 280
+            initialDelaySeconds: 170
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 35

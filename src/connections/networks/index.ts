@@ -20,7 +20,7 @@ export const standalones: Networks = {
   },
   polkadot: {
     name: 'Polkadot',
-    node: resolveOnfinalityUrl('polkadot'),
+    node:  resolveOnfinalityUrl('polkadot'),
     icon: 'polkadot.svg',
     isTransferable: true
   },
@@ -96,7 +96,7 @@ export const kusamaParachains: Networks = {
     isTransferable: true,
     tokenTransferMethod: 'currencies.transfer(recipient,id,amount)'
   },
-  parallelHeiko: {
+  heiko: {
     name: 'Parallel Heiko',
     node: 'wss://heiko-rpc.parallel.fi',
     icon: 'parallel.svg',
@@ -120,8 +120,8 @@ export const kusamaParachains: Networks = {
     paraId: 2009,
     disabled: true
   },
-  bifrost: {
-    name: 'Bifrost',
+  'bifrostKusama': {
+    name: 'Bifrost Kusama',
     node: resolveOnfinalityUrl('bifrost-parachain'),
     icon: 'bifrost.svg',
     paraId: 2001,
@@ -421,6 +421,31 @@ export const polkadotParachains: Networks = {
     isTransferable: true,
     tokenTransferMethod: 'assets.transfer(id,recipient,amount)'
   },
+   bifrostPolkadot: {
+    name: 'Bifrost Polkadot',
+    node: resolveOnfinalityUrl('bifrost-polkadot'),
+    icon: 'bifrost.svg',
+    paraId: 2030,
+    getApi: getBitfrostApi,
+    isTransferable: true,
+    tokenTransferMethod: 'tokens.transfer(recipient,id,amount)'
+  },
+  pendulum: {
+    name: 'Pendulum',
+    node: 'wss://rpc-pendulum.prd.pendulumchain.tech',
+    icon: 'pendulum.svg',
+    paraId: 2094,
+    isTransferable: true,
+    tokenTransferMethod: 'tokens.transfer(recipient,id,amount)'
+  },
+  statemint: {
+    name: 'Statemint',
+    node: resolveOnfinalityUrl('statemint'),
+    icon: 'statemine.svg',
+    paraId: 1000,
+    isTransferable: true,
+    tokenTransferMethod: 'assets.transfer(id,recipient,amount)'
+  },
   clover: {
     name: 'Clover Finance',
     node: resolveOnfinalityUrl('clover'),
@@ -478,7 +503,7 @@ export const polkadotParachains: Networks = {
     isTransferable: true,
     tokenTransferMethod: 'currencies.transfer(recipient,id,amount)'
   },
-  'darwinia-pokadot': {
+  'darwiniaPokadot': {
     name: 'Darwinia',
     node: '',
     icon: 'darwinia.png',
@@ -545,7 +570,7 @@ export const polkadotParachains: Networks = {
     paraId: 2011,
     vestingMethod: 'vesting.vest'
   },
-  'hydra-dx': {
+  'hydra': {
     name: 'HydraDX',
     icon: 'snakenet.svg',
     node: resolveOnfinalityUrl('hydradx'),
