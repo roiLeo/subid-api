@@ -1,4 +1,4 @@
-import { ChainId, FN } from '@subsocial/bridge/build'
+import { ChainId, FN } from '@subsocial/subid-bridge'
 import { ApiPromise, Apis } from '../../connections/networks/types'
 import { getCrossChainAdapter } from './utils'
 import { firstValueFrom } from 'rxjs'
