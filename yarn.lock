@@ -3485,10 +3485,10 @@
     "@polkadot/api" latest
     lodash.camelcase "^4.3.0"
 
-"@subsocial/subid-bridge@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@subsocial/subid-bridge/-/subid-bridge-0.0.2.tgz#554f65e9c6b021be1a3e82ca02a818df5e52bbf7"
-  integrity sha512-iLhPJ5zYZoC9LIPDEQLuu3RWErdguzEF74RHtX8SWiQ7A7dXEnhnRd8Z0AM2mDM9XOsDKZDiD+w1ARPNAk+xhA==
+"@subsocial/subid-bridge@^0.0.3-beta":
+  version "0.0.3-beta"
+  resolved "https://registry.yarnpkg.com/@subsocial/subid-bridge/-/subid-bridge-0.0.3-beta.tgz#721dbf1096109fdfa60ce799912cfa5f7c3ff79c"
+  integrity sha512-zK4SpfF4KoytM0BtMaDclSTQwyPnRO4PbzrrIgOlGgN6rV611GC/jbKBh+hqCBk/aoTa7xcxkd6WyKKFjmLVLw==
   dependencies:
     "@acala-network/api" "4.1.8-7"
     "@acala-network/sdk" "4.1.8-7"
