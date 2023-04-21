@@ -968,10 +968,10 @@
   resolved "https://registry.yarnpkg.com/@kodadot1/static/-/static-0.0.1.tgz#35a08a70a1456b783f586a375235b9dfe2e0ade0"
   integrity sha512-ULbPocLXnD2umJD898wwXX8vRM27g1MWn4znKjosBiFcVz9453YNYDuU+0U6/PHGc0XdHy30uIlP4OIoNfGuqA==
 
-"@kodadot1/uniquery@^0.2.3-rc.0":
-  version "0.2.3-rc.0"
-  resolved "https://registry.yarnpkg.com/@kodadot1/uniquery/-/uniquery-0.2.3-rc.0.tgz#f1664b6b1db100a2250faa7bd2d65d09eb16d765"
-  integrity sha512-ShuQaacHJlhfHIbM0zwvAaOtVMgRvB+nrPD5vB7h6TPl3e5kfN9RqFlj2DQKz/1DbHREhCeO4lsRKmtkRjFM+g==
+"@kodadot1/uniquery@^0.3.0-rc.0":
+  version "0.3.0-rc.0"
+  resolved "https://registry.yarnpkg.com/@kodadot1/uniquery/-/uniquery-0.3.0-rc.0.tgz#295a3d7b562dd5d26bbb9869d48645e51394defe"
+  integrity sha512-jwS2jatwrtJR1HG7Cbx15dPWJUl0FOTtNRJ5XbyH4QanGUbO1H6W7L5kKTe7pTLKb4bMdkUYjcMmjkcoCzkKSg==
   dependencies:
     "@kodadot1/static" "0.0.1"
     gql-query-builder "^3.8.0"
