@@ -27,7 +27,8 @@ const createIpfsUrl = (cidUrl?: string) => cidUrl?.startsWith('ipfs:/') ? cidUrl
 
 type BuildLinkFn = (id: string) => string
 
-const buildRmrk1Link: BuildLinkFn = (id) => `https://singular.rmrk.app/collectibles/${id}`
+const buildRmrk1Link: BuildLinkFn = (id) => `https://kodadot.xyz/rmrk/gallery/${id}`
+
 const buildRmrk2Link: BuildLinkFn = (id) => `https://singular.app/collectibles/${id}`
 // const buildKanariaLink: BuildLinkFn = (id) => `https://kanaria.rmrk.app/catalogue/${id}`
 const buildStatemineLink: BuildLinkFn = (id) => `https://singular.rmrk.app/collectibles/statemine/${id}`
