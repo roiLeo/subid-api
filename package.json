@@ -38,6 +38,7 @@
     "@bifrost-finance/api": "^1.6.1",
     "@equilab/api": "^1.12.23",
     "@isaacs/ttlcache": "^1.0.3",
+    "@kodadot1/uniquery": "^0.2.3-rc.0",
     "@polkadot/api-base": "^9.11.1",
     "@polkadot/apps-config": "0.116.2-64",
     "@polkadot/networks": "^7.3.1",

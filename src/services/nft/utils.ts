@@ -17,7 +17,6 @@ type CommissionPercentages = {
   royalty?: number
 }
 
-export const createRmrk1Url = (account: string) => `https://singular.rmrk-api.xyz/api/account-rmrk1/${account}`
 export const createRmrk2Url = (account: string) => `https://singular.rmrk-api.xyz/api/account/${account}`
 // export const createKanariaBirdsRmrkUrl = (account: string) => `https://kanaria.rmrk.app/api/rmrk2/account-birds/${account}`
 // export const createKanariaItemsrRmrkUrl = (account: string) => `https://kanaria.rmrk.app/api/rmrk2/account-items/${account}`

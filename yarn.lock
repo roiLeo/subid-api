@@ -963,6 +963,22 @@
   resolved "https://registry.yarnpkg.com/@kiltprotocol/type-definitions/-/type-definitions-0.1.23.tgz#c54475dad7849dc4654975da33590872fc9acdde"
   integrity sha512-5bGUDo8aVTWttwUrV1gyRUlbBn9zllv6/ofAda9ejMbjY5o99YqsAWlXg1mro6BqE3rcF/i0tGbIdO9Z0tOttA==
 
+"@kodadot1/static@0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@kodadot1/static/-/static-0.0.1.tgz#35a08a70a1456b783f586a375235b9dfe2e0ade0"
+  integrity sha512-ULbPocLXnD2umJD898wwXX8vRM27g1MWn4znKjosBiFcVz9453YNYDuU+0U6/PHGc0XdHy30uIlP4OIoNfGuqA==
+
+"@kodadot1/uniquery@^0.2.3-rc.0":
+  version "0.2.3-rc.0"
+  resolved "https://registry.yarnpkg.com/@kodadot1/uniquery/-/uniquery-0.2.3-rc.0.tgz#f1664b6b1db100a2250faa7bd2d65d09eb16d765"
+  integrity sha512-ShuQaacHJlhfHIbM0zwvAaOtVMgRvB+nrPD5vB7h6TPl3e5kfN9RqFlj2DQKz/1DbHREhCeO4lsRKmtkRjFM+g==
+  dependencies:
+    "@kodadot1/static" "0.0.1"
+    gql-query-builder "^3.8.0"
+    ofetch "^1.0.1"
+    scule "^1.0.0"
+    ufo "^1.1.1"
+
 "@laminar/type-definitions@0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@laminar/type-definitions/-/type-definitions-0.3.1.tgz#e1b62ab353245f9b3454cb5d909a329f66aaac8f"
@@ -3811,6 +3827,11 @@ depd@~1.1.2:
   resolved "https://registry.yarnpkg.com/depd/-/depd-1.1.2.tgz#9bcd52e14c097763e749b274c4346ed2e560b5a9"
   integrity sha512-7emPTl6Dpo6JRXOXjLRxck+FlLRX5847cLKEn00PLAgc3g2hTZZgr+e4c2v6QpSmLeFP3n5yUo7ft6avBK/5jQ==
 
+destr@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/destr/-/destr-1.2.2.tgz#7ba9befcafb645a50e76b260449c63927b51e22f"
+  integrity sha512-lrbCJwD9saUQrqUfXvl6qoM+QN3W7tLV5pAOs+OqOmopCCz/JkE05MHedJR1xfk4IAnZuJXPVuN5+7jNA2ZCiA==
+
 destroy@1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.2.0.tgz#4803735509ad8be552934c67df614f94e66fa015"
@@ -4415,6 +4436,11 @@ globals@^13.19.0:
   integrity sha512-dkQ957uSRWHw7CFXLUtUHQI3g3aWApYhfNR2O6jn/907riyTYKVBmxYVROkBcY614FSSeSJh7Xm7SrUWCxvJMQ==
   dependencies:
     type-fest "^0.20.2"
+
+gql-query-builder@^3.8.0:
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/gql-query-builder/-/gql-query-builder-3.8.0.tgz#d182d127f88abb7d39f7bec2c64f8b4570812e2f"
+  integrity sha512-q0PncZTrLDeyiH4R7YH1ISM+XGB4NvQ8eTm/Wr/sHSuquFZvqvDpGyMhbgoCZDc8kNAK8GOdfh3nI2GCLREFvw==
 
 grapheme-splitter@^1.0.4:
   version "1.0.4"
@@ -5472,6 +5498,11 @@ node-domexception@^1.0.0:
   resolved "https://registry.yarnpkg.com/node-domexception/-/node-domexception-1.0.0.tgz#6888db46a1f71c0b76b3f7555016b63fe64766e5"
   integrity sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==
 
+node-fetch-native@^1.0.2:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/node-fetch-native/-/node-fetch-native-1.1.0.tgz#a530f5c4cadb49b382dcf81d8f5f19ed0f457fbe"
+  integrity sha512-nl5goFCig93JZ9FIV8GHT9xpNqXbxQUzkOmKIMKmncsBH9jhg7qKex8hirpymkBFmNQ114chEEG5lS4wgK2I+Q==
+
 node-fetch@2.6.7, node-fetch@^2.6.1, node-fetch@^2.6.7:
   version "2.6.7"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.7.tgz#24de9fba827e3b4ae44dc8b20256a379160052ad"
@@ -5539,6 +5570,15 @@ object-inspect@^1.9.0:
   version "1.12.2"
   resolved "https://registry.yarnpkg.com/object-inspect/-/object-inspect-1.12.2.tgz#c0641f26394532f28ab8d796ab954e43c009a8ea"
   integrity sha512-z+cPxW0QGUp0mcqcsgQyLVRDoXFQbXOwBaqyF7VIgI4TWNQsDHrBpUQslRmIfAoYWdYzs6UlKJtB2XJpTaNSpQ==
+
+ofetch@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/ofetch/-/ofetch-1.0.1.tgz#68b410d4494e37fa67b99e9a60172ae447b2c44c"
+  integrity sha512-icBz2JYfEpt+wZz1FRoGcrMigjNKjzvufE26m9+yUiacRQRHwnNlGRPiDnW4op7WX/MR6aniwS8xw8jyVelF2g==
+  dependencies:
+    destr "^1.2.2"
+    node-fetch-native "^1.0.2"
+    ufo "^1.1.0"
 
 on-finished@2.4.1, on-finished@^2.3.0:
   version "2.4.1"
@@ -6016,6 +6056,11 @@ scryptsy@^2.1.0:
   resolved "https://registry.yarnpkg.com/scryptsy/-/scryptsy-2.1.0.tgz#8d1e8d0c025b58fdd25b6fa9a0dc905ee8faa790"
   integrity sha512-1CdSqHQowJBnMAFyPEBRfqag/YP9OF394FV+4YREIJX4ljD7OxvQRDayyoyyCk+senRjSkP6VnUNQmVQqB6g7w==
 
+scule@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/scule/-/scule-1.0.0.tgz#895e6f4ba887e78d8b9b4111e23ae84fef82376d"
+  integrity sha512-4AsO/FrViE/iDNEPaAQlb77tf0csuq27EsVpy6ett584EcRTp6pTDLoGWVxCD77y5iU5FauOvhsI4o1APwPoSQ==
+
 semver@^5.6.0, semver@^5.7.1:
   version "5.7.1"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.7.1.tgz#a954f931aeba508d307bbf069eff0c01c96116f7"
@@ -6349,6 +6394,11 @@ typescript@^4.4.3, typescript@^4.4.x, typescript@^4.5.2, typescript@^4.7.4:
   version "4.9.4"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.4.tgz#a2a3d2756c079abda241d75f149df9d561091e78"
   integrity sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==
+
+ufo@^1.1.0, ufo@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/ufo/-/ufo-1.1.1.tgz#e70265e7152f3aba425bd013d150b2cdf4056d7c"
+  integrity sha512-MvlCc4GHrmZdAllBc0iUDowff36Q9Ndw/UzqmEKyrfSzokTd9ZCy1i+IIk5hrYKkjoYVQyNbrw7/F8XJ2rEwTg==
 
 uglify-js@^3.1.4:
   version "3.17.4"
