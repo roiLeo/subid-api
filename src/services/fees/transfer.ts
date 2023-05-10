@@ -11,6 +11,7 @@ const encodeParamToId = (param: GetTransferFeeParam) => `${param.token}-${param.
 const transferFeeCache: Record<string, TransferFeeData> = {}
 
 const dummyAccount = '5EZVynPKXVgRW3pgmB5whqoFwEa94USMVyh68DexVJMNyR3p'
+const evmDummyAccount = '0xDB9e87Fafcdd66f5AFF56C812fd0645Ab2B608e5'
 export type GetTransferFeeParam = {
   token: string
   from: string
@@ -72,10 +73,11 @@ async function getCrossChainTransferFee ({ from, token, to }: GetTransferFeePara
 
   try {
     const adapter = await getCrossChainAdapter(from, node)
+
     if (!adapter) return amount
     amount = await firstValueFrom(adapter.estimateTxFee({
       to: to as ChainId,
-      address: dummyAccount,
+      address: to === 'moonriver' || to === 'moonbeam' ? evmDummyAccount : dummyAccount,
       amount: FN.ZERO,
       signer: dummyAccount,
       token

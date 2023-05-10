@@ -64,6 +64,7 @@ const customOrmlTokenGetter = asTypesGenerator<
     return api.query.tokens.accounts(account, { XCM: token }) as any
   }
 })
+
 const ormlTokenGetterNetworkMapper: { [key: string]: keyof typeof customOrmlTokenGetter } = {
   astar: 'assets.account',
   shiden: 'assets.account',
@@ -81,7 +82,7 @@ const ormlTokenGetterNetworkMapper: { [key: string]: keyof typeof customOrmlToke
   altair: 'ormlTokens.accounts',
   centrifuge: 'ormlTokens.accounts',
   shadow: 'ormlTokens.accounts',
-  pendulum: 'tokens.accounts'
+  pendulum: 'tokens.accounts',
 }
 
 const getOrmlTokens: GetBalancesType = async (api, network, account, tokens) => {
@@ -93,10 +94,24 @@ const getOrmlTokens: GetBalancesType = async (api, network, account, tokens) => 
       let balances = {} as unknown as Balances
       const isObject = typeof token === 'object'
 
+      let tokenObj: any = { Token: token }
+
+      if(isObject) {
+        tokenObj = token.currency
+
+        if(network === 'bifrostKusama') {
+          const [ currencyAssetId, asset ] = isObject && token?.currency ? Object.entries(token.currency)[0] : [] 
+      
+          const assetId = currencyAssetId?.includes('Token') ? currencyAssetId?.replace('VS', '') : currencyAssetId
+          tokenObj = { [assetId]: asset  }
+        }
+      }
+
       const balancesCodec = await balanceGetter(api, {
         account: account,
-        token: isObject ? token.currency : { Token: token }
+        token: tokenObj
       })
+
       const { free, frozen, reserved } = balancesCodec as any
       balances = parseBalances(free, reserved, frozen)
 
