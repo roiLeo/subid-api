@@ -24,7 +24,7 @@ type AccountMetaData = {
 }
 
 const addMetaData = (data: AccountMetaData[], type: string, relayChain: string): any[] => {
-  return data.map(({ account, amount }) => ({ account, amount, relayChain, type }))
+  return data?.map(({ account, amount }) => ({ account, amount, relayChain, type }))
 }
 
 type GetDataFn = (props: MemberDataProps) => any

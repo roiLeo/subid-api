@@ -140,7 +140,7 @@ export const kusamaParachains: Networks = {
   genshiro: {
     name: 'Genshiro',
     icon: 'genshiro.svg',
-    node: 'wss://node.genshiro.io',
+    node: 'wss://node.ksm.genshiro.io',
     paraId: 2024,
     nativeToken: 'GENS'
   },
