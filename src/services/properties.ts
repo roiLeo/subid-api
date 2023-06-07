@@ -42,7 +42,6 @@ const customFetchAssetsRegistryByNetwork = {
   centrifuge: commonAssetRegistries['ormlAssetRegistry.metadata'],
   shadow: commonAssetRegistries['assets.metadata'],
   pichiu: commonAssetRegistries['assets.metadata'],
-  listen: commonAssetRegistries['currencies.listenAssetsInfo'],
   calamari: commonAssetRegistries['assets.metadata'],
   manta: commonAssetRegistries['assets.metadata'],
   moonriver: commonAssetRegistries['assets.metadata'],
