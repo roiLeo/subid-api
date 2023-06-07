@@ -346,15 +346,6 @@ export const kusamaParachains: Networks = {
     icon: 'tanganika.png',
     disabled: true
   },
-  listen: {
-    name: 'Listen Network',
-    node: 'wss://rpc.mainnet.listen.io',
-    nativeToken: 'LT',
-    paraId: 2118,
-    icon: 'listen.png',
-    isTransferable: true,
-    tokenTransferMethod: 'currencies.transfer(recipient,id,amount)'
-  },
   invArch: {
     name: 'InvArch Tinkernet',
     node: resolveOnfinalityUrl('invarch-tinkernet'),

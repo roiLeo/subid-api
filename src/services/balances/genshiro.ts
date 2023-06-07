@@ -8,6 +8,7 @@ import { Option } from '@polkadot/types'
 import { KeyringPair } from '@polkadot/keyring/types'
 import { parseBalances, TokenBalances } from './utils'
 import { BN } from '@polkadot/util'
+import { isDef } from '@subsocial/utils';
 
 function getAccountBalance(
   api: ApiPromise,
@@ -22,8 +23,8 @@ function getAccountBalance(
 
 function convertBalance(signedBalance: SignedBalance): string {
   return signedBalance.isNegative
-    ? signedBalance.asNegative.toBn().neg().toString()
-    : signedBalance.asPositive.toBn().toString()
+    ? signedBalance.asNegative?.toBn().neg().toString()
+    : signedBalance.asPositive?.toBn().toString()
 }
 
 export async function getGenshiroTokens(
@@ -34,7 +35,8 @@ export async function getGenshiroTokens(
 
   const assets = (assetsOptCodec as Option<any>)
     .unwrap()
-    .map((a) => assetFromU64(parseInt(a.id[0].toString(), 10)).toUpperCase())
+    .map((a) => a.id[0] ? assetFromU64(parseInt(a.id[0].toString(), 10)).toUpperCase() : undefined)
+    .filter(isDef)
 
   const balancesArr: SignedBalance[] = await Promise.all(assets.map((a) => 
     getAccountBalance(api, accountId, a)))
@@ -42,7 +44,7 @@ export async function getGenshiroTokens(
   const balances: TokenBalances = {}
 
   balancesArr.forEach((signedBalance, i) => {
-    balances[assets[i]] = parseBalances(new BN(convertBalance(signedBalance)))
+    balances[assets[i]] = parseBalances(new BN(convertBalance(signedBalance) || '0'))
   })
 
   return balances
