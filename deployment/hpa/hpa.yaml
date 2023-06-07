@@ -6,8 +6,8 @@ metadata:
   name: subid-back
   namespace: sub-id
 spec:
-  maxReplicas: 6
-  minReplicas: 3
+  maxReplicas: 4
+  minReplicas: 2
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
@@ -18,10 +18,10 @@ spec:
         name: memory
         target:
           type: Utilization
-          averageUtilization: 92
+          averageUtilization: 97
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: 85
+          averageUtilization: 95
