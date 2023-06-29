@@ -18,13 +18,12 @@ export const startHttpServer = (apis: Apis) => {
 
   app.use(
     cors((req, callback) => {
-      const corsOptions = { origin: true }
       const origin = req.header('Origin')
       const isAllowedOrigin = allowedOrigins.some((allowedOrigin) => origin?.includes(allowedOrigin))
       if (!isAllowedOrigin) {
-        corsOptions.origin = false
+        callback(new Error('Not allowed by CORS'))
       }
-      callback(null, corsOptions)
+      callback(null, { origin: true })
     })
   )
 
