@@ -20,7 +20,7 @@ export const standalones: Networks = {
   },
   polkadot: {
     name: 'Polkadot',
-    node:  'wss://polkadot.api.onfinality.io/ws?apikey=dd401ef6-38da-4d0e-9bf9-3a3b890b7035',
+    node:  resolveOnfinalityUrl('polkadot'),
     icon: 'polkadot.svg',
     isTransferable: true
   },
