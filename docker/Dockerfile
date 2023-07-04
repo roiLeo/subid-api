@@ -1,13 +1,21 @@
 FROM node:16-alpine3.16 as builder
 
+WORKDIR /opt/subsocial/app
+
+COPY package.json yarn.lock* ./
+
+RUN yarn install
+
 COPY . .
 
-COPY localhost.env .env
+RUN mv localhost.env .env && \
+    NODE_ENV=production yarn build
 
-RUN yarn install \ 
-    && NODE_ENV=production yarn build
+FROM gcr.io/distroless/nodejs:16 AS runner
 
-EXPOSE 3001
+WORKDIR /opt/subsocial/app
 
-ENTRYPOINT [ "yarn", "start" ]
+COPY --from=builder /opt/subsocial/app .
+
+CMD [ "./build/src/index.js" ]
 
