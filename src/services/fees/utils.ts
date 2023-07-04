@@ -10,6 +10,7 @@ import { IntegriteeAdapter } from '@polkawallet/bridge/adapters/integritee'
 import { InterlayAdapter, KintsugiAdapter } from '@polkawallet/bridge/adapters/interlay'
 import { KicoAdapter } from '@polkawallet/bridge/adapters/kico'
 import { PichiuAdapter } from '@polkawallet/bridge/adapters/kylin'
+import { ListenAdapter } from '@polkawallet/bridge/adapters/listen'
 import { CalamariAdapter } from '@polkawallet/bridge/adapters/manta'
 import { MoonbeamAdapter, MoonriverAdapter } from '@polkawallet/bridge/adapters/moonbeam'
 import { TuringAdapter } from '@polkawallet/bridge/adapters/oak'
@@ -76,6 +77,9 @@ const transferAdapters: Record<string, { adapter: BaseCrossChainAdapter; chainNa
   },
   pichiu: {
     adapter: new PichiuAdapter(),
+  },
+  listen: {
+    adapter: new ListenAdapter(),
   },
   calamari: {
     adapter: new CalamariAdapter(),

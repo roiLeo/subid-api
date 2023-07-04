@@ -1,5 +1,5 @@
 import { WithApis, SubsocialProfilesResult } from './types'
-import { /* runQueryOrUndefined, */ toGenericAccountId } from './utils'
+import { runQueryOrUndefined, toGenericAccountId } from './utils'
 import { Registration } from '@polkadot/types/interfaces'
 import { hexToString } from '@polkadot/util'
 import { ApiPromise } from '../connections/networks/types'
@@ -105,7 +105,7 @@ const parseIdentity = (
   identitiesInfoCache.set(chain, { ...identityByChain, ...identityByAccount })
 }
 
-export const getIdentity = async (api: ApiPromise, accounts: string[], chain: string) => {
+const getIdentity = async (api: ApiPromise, accounts: string[], chain: string) => {
   const needUpdate = identitiesInfoCache.needUpdate
 
   const forceUpdate = needUpdate && needUpdate()
@@ -203,25 +203,25 @@ const getSubsococilaIdentity = async (accounts: string[]) => {
 }
 
 export const getIdentities = async ({
-  // apis: { kusama, polkadot, shiden },
+  apis: { kusama, polkadot, shiden },
   accounts
 }: GetIdentitiesProps) => {
   const identities = {}
 
   const filteredAccounts = accounts.filter(account => isDef(account) && !!account)
 
-  const [/* kusamaIdentity, polkadotIdentity, shidenIdentity,  */subsocialIdentity] = await Promise.all([
-    // runQueryOrUndefined(kusama, async (api) => getIdentity(api, filteredAccounts, 'kusama')),
-    // runQueryOrUndefined(polkadot, async (api) => getIdentity(api, filteredAccounts, 'polkadot')),
-    // runQueryOrUndefined(shiden, async (api) => getIdentity(api, filteredAccounts, 'shiden')),
+  const [kusamaIdentity, polkadotIdentity, shidenIdentity, subsocialIdentity] = await Promise.all([
+    runQueryOrUndefined(kusama, async (api) => getIdentity(api, filteredAccounts, 'kusama')),
+    runQueryOrUndefined(polkadot, async (api) => getIdentity(api, filteredAccounts, 'polkadot')),
+    runQueryOrUndefined(shiden, async (api) => getIdentity(api, filteredAccounts, 'shiden')),
     getSubsococilaIdentity(filteredAccounts)
   ])
 
   filteredAccounts.forEach((account) => {
     identities[account] = {
-      // kusama: kusamaIdentity?.[account],
-      // polkadot: polkadotIdentity?.[account],
-      // shiden: shidenIdentity?.[account],
+      kusama: kusamaIdentity?.[account],
+      polkadot: polkadotIdentity?.[account],
+      shiden: shidenIdentity?.[account],
       subsocial: subsocialIdentity?.[account]
     }
   })
