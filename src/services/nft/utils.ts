@@ -17,6 +17,7 @@ type CommissionPercentages = {
   royalty?: number
 }
 
+export const createRmrk1Url = (account: string) => `https://singular.rmrk-api.xyz/api/account-rmrk1/${account}`
 export const createRmrk2Url = (account: string) => `https://singular.rmrk-api.xyz/api/account/${account}`
 // export const createKanariaBirdsRmrkUrl = (account: string) => `https://kanaria.rmrk.app/api/rmrk2/account-birds/${account}`
 // export const createKanariaItemsrRmrkUrl = (account: string) => `https://kanaria.rmrk.app/api/rmrk2/account-items/${account}`
@@ -27,8 +28,7 @@ const createIpfsUrl = (cidUrl?: string) => cidUrl?.startsWith('ipfs:/') ? cidUrl
 
 type BuildLinkFn = (id: string) => string
 
-const buildRmrk1Link: BuildLinkFn = (id) => `https://kodadot.xyz/rmrk/gallery/${id}`
-
+const buildRmrk1Link: BuildLinkFn = (id) => `https://singular.rmrk.app/collectibles/${id}`
 const buildRmrk2Link: BuildLinkFn = (id) => `https://singular.app/collectibles/${id}`
 // const buildKanariaLink: BuildLinkFn = (id) => `https://kanaria.rmrk.app/catalogue/${id}`
 const buildStatemineLink: BuildLinkFn = (id) => `https://singular.rmrk.app/collectibles/statemine/${id}`

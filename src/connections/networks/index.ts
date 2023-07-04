@@ -140,7 +140,7 @@ export const kusamaParachains: Networks = {
   genshiro: {
     name: 'Genshiro',
     icon: 'genshiro.svg',
-    node: 'wss://node.ksm.genshiro.io',
+    node: 'wss://node.genshiro.io',
     paraId: 2024,
     nativeToken: 'GENS'
   },
@@ -345,6 +345,15 @@ export const kusamaParachains: Networks = {
     nativeToken: 'DHX',
     icon: 'tanganika.png',
     disabled: true
+  },
+  listen: {
+    name: 'Listen Network',
+    node: 'wss://rpc.mainnet.listen.io',
+    nativeToken: 'LT',
+    paraId: 2118,
+    icon: 'listen.png',
+    isTransferable: true,
+    tokenTransferMethod: 'currencies.transfer(recipient,id,amount)'
   },
   invArch: {
     name: 'InvArch Tinkernet',
