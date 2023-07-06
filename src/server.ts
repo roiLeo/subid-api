@@ -5,13 +5,13 @@ import { reqTimeoutSecs, allowedOrigins, port } from './constant/env'
 import { newLogger } from '@subsocial/utils'
 
 import { createRoutes } from './routes'
-import { Apis } from './connections/networks/types'
+import { Connections } from './connections'
 
 require('dotenv').config()
 
 const log = newLogger('HTTP server')
 
-export const startHttpServer = (apis: Apis) => {
+export const startHttpServer = (apis: Connections) => {
   const app = express()
 
   app.use(express.static('public'))

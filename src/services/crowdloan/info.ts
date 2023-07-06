@@ -85,7 +85,7 @@ type GetCrowdloanInfoProps = WithApis & {
 
 const fetchCrowdloansInfo = async (api: ApiPromise, paraIds: string[]) => {
   const [bestNumber, funds, leases, minContribution] = await Promise.all([
-    api.derive.chain.bestNumber(),
+    api.query.system.number(),
     api.query.crowdloan?.funds.multi(paraIds),
     api.query.slots.leases.multi(paraIds),
     api.consts.crowdloan.minContribution

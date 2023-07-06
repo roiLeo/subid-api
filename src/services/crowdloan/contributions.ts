@@ -103,7 +103,7 @@ export const getCrowdloanLeaseInfo = async (relayChain: RelayChain, api: ApiProm
     if (!api) return undefined
 
     const { start, end } = leasePeriod
-    const bestNumberString = (await api.derive.chain.bestNumber()).toPrimitive().toString()
+    const bestNumberString = (await api.query.system.number()).toString()
     const bestNumber = parseInt(bestNumberString)
     const currentTimestampString = (await api.query.timestamp.now()).toPrimitive().toString()
     const currentTimestamp = parseInt(currentTimestampString)

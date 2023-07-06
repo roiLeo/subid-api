@@ -1,5 +1,4 @@
 import { Router } from 'express'
-import { Apis } from '../../connections/networks/types'
 import { getStakingProps } from '../../services/validatorStaking/consts'
 import { asyncErrorHandler } from '../../services/utils'
 import createNominatorsRouter from './nominators'
@@ -8,14 +7,15 @@ import {
   getCurrentEra, 
   getRewardsByNominator
 } from '../../services/validatorStaking/index'
+import { Connections } from '../../connections'
 
-const createValidatorStakingRouter = (apis: Apis) => {
+const createValidatorStakingRouter = (apis: Connections) => {
   const router = Router()
 
   router.get('/list/:network/', async function (req, res) {
     const { network } = req.params
     const info = await getValidatorsList({
-      apis,
+      apis: apis.wsApis,
       network
     })
 
@@ -25,7 +25,7 @@ const createValidatorStakingRouter = (apis: Apis) => {
   router.get('/props/:network/', async function (req, res) {
     const { network } = req.params
     const info = await getStakingProps({
-      apis,
+      apis: apis.mixedApis,
       network
     })
 
@@ -35,7 +35,7 @@ const createValidatorStakingRouter = (apis: Apis) => {
   router.get('/era/current/:network/', async function (req, res) {
     const { network } = req.params
     const info = await getCurrentEra({
-      apis,
+      apis: apis.mixedApis,
       network,
     })
 
@@ -45,7 +45,7 @@ const createValidatorStakingRouter = (apis: Apis) => {
   router.get('/reward/:network/:account', async function (req, res) {
     const { network, account } = req.params
     const info = await getRewardsByNominator({
-      apis,
+      apis: apis.mixedApis,
       network,
       account
     })
@@ -53,7 +53,7 @@ const createValidatorStakingRouter = (apis: Apis) => {
     res.send(info)
   })
 
-  router.use('/nominator', asyncErrorHandler(createNominatorsRouter(apis)))
+  router.use('/nominator', asyncErrorHandler(createNominatorsRouter(apis.mixedApis)))
 
   return router
 }

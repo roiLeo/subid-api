@@ -1,9 +1,9 @@
-import { ApiPromise } from '@polkadot/api'
+import { ApiPromise, HttpProvider } from '@polkadot/api';
 import { WsProvider } from '@polkadot/api'
 import { RelayChain } from '../../services/crowdloan/types'
 
 type GetApiFnProps = {
-  provider: WsProvider
+  provider: WsProvider | HttpProvider
   types: any
 }
 
@@ -11,6 +11,7 @@ export type GetApiFn = (props: GetApiFnProps) => ApiPromise
 
 export type NetworkBaseInfo = {
   node: string
+  wsNode?: string
   icon: string
   name: string
   isEthLike?: boolean
