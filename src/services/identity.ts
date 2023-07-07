@@ -13,7 +13,7 @@ import Cache from '../cache'
 
 
 const updateDelay = 24 * 3600 * 1000 //seconds
-const identitiesInfoCache = new Cache(updateDelay)
+const identitiesInfoCache = new Cache<any>('identities', updateDelay)
 
 type Field = {
   raw: string
@@ -36,7 +36,7 @@ type GetIdentitiesProps = WithApis & {
   accounts: string[]
 }
 
-const parseIdentity = (
+const parseIdentity = async (
   chain: string,
   accounts: string[],
   accountsWithSubIdentity: string[],
@@ -44,7 +44,7 @@ const parseIdentity = (
   identities?: Option<any>[]
 ) => {
   if (!identities) return undefined
-  const identityByChain = identitiesInfoCache.get(chain)
+  const identityByChain = await identitiesInfoCache.get(chain)
 
   const parsedIdentities = {}
   const identityByAccount = {}
@@ -102,14 +102,14 @@ const parseIdentity = (
     }
   })
 
-  identitiesInfoCache.set(chain, { ...identityByChain, ...identityByAccount })
+  await identitiesInfoCache.set(chain, { ...identityByChain, ...identityByAccount })
 }
 
 export const getIdentity = async (api: ApiPromise, accounts: string[], chain: string) => {
   const needUpdate = identitiesInfoCache.needUpdate
 
-  const forceUpdate = needUpdate && needUpdate()
-  const cacheDataByChain = identitiesInfoCache.get(chain)
+  const forceUpdate = needUpdate && await needUpdate()
+  const cacheDataByChain = await identitiesInfoCache.get(chain)
 
   const cachedDataKeys = cacheDataByChain ? Object.keys(cacheDataByChain) : []
   
@@ -144,10 +144,10 @@ export const getIdentity = async (api: ApiPromise, accounts: string[], chain: st
     const accountsWithSubIdentity = [...accountsToFetch, ...parentIds]
 
     const identities = (await api.query.identity.identityOf.multi(accountsWithSubIdentity)) as Option<any>[]
-    parseIdentity(chain, accountsToFetch, accountsWithSubIdentity, superOfMultiObj, identities)
+    await parseIdentity(chain, accountsToFetch, accountsWithSubIdentity, superOfMultiObj, identities)
   }
 
-  const updatedIdentityInfo = identitiesInfoCache.get(chain)
+  const updatedIdentityInfo = await identitiesInfoCache.get(chain)
 
   const result = pick(updatedIdentityInfo, accounts)
 

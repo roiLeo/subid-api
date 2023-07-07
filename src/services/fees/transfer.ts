@@ -21,7 +21,7 @@ export async function getTransferFee (apis: Apis, params: GetTransferFeeParam): 
   const cacheData = transferFeeCache[encodeParamToId(params)]
   if (cacheData) return cacheData
 
-  let chainProperty = getCachedChainProperties(from)
+  let chainProperty = await getCachedChainProperties(from)
   const nativeToken = chainProperty?.nativeToken || chainProperty?.tokenSymbols?.[0]
 
   const api = apis[from as keyof Apis]
@@ -40,7 +40,7 @@ export async function getTransferFee (apis: Apis, params: GetTransferFeeParam): 
 }
 
 async function getInternalTransferFee (api: ApiPromise, { from, token }: GetTransferFeeParam) {
-  let chainProperty = getCachedChainProperties(from)
+  let chainProperty = await getCachedChainProperties(from)
   const assetsRegistry = chainProperty?.assetsRegistry
   const nativeToken = chainProperty?.nativeToken || chainProperty?.tokenSymbols?.[0]
   const isNativeToken = nativeToken === token

@@ -6,7 +6,7 @@ import registry from "@subsocial/api/utils/registry"
 import Cache from '../../cache'
 import { FIVE_MINUTES } from '../../constant/index';
 
-const validators = new Cache<Record<'polkadot' | 'kusama', any>>(FIVE_MINUTES)
+const validators = new Cache<Record<'polkadot' | 'kusama', any>>('validators', FIVE_MINUTES)
 
 const getValidators = async (api: ApiPromise) => {
   if(!api) return []

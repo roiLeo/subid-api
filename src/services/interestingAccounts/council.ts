@@ -4,7 +4,7 @@ import { ApiPromise } from '@polkadot/api'
 import { FIVE_MINUTES } from '../../constant/index'
 import Cache from '../../cache'
 
-const councilMembers = new Cache<Record<'polkadot' | 'kusama', any>>(FIVE_MINUTES)
+const councilMembers = new Cache<Record<'polkadot' | 'kusama', any>>('council-members', FIVE_MINUTES)
 
 const getCouncilMembers = async (api: ApiPromise) => {
   if(!api) return []

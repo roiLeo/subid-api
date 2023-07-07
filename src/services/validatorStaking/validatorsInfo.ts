@@ -10,7 +10,7 @@ import type {
 } from '@polkadot/api-derive/types'
 import Cache from '../../cache'
 
-const validatorStakingInfo = new Cache(FIVE_MINUTES)
+const validatorStakingInfoCache = new Cache<any>('validator-staking-info', FIVE_MINUTES)
 
 /// https://github.dev/polkadot-js/apps/blob/fb8f7fe86b2945fcc71dcd11c67ebeeab35ee37e/packages/page-staking/src/useSortedTargets.ts#L120-L121
 const parseValidatorStakingInfo = (
@@ -128,11 +128,11 @@ function mergeValidatorsInfo(
 }
 
 export const getValidatorsData = async (api: any, network: string) => {
-  const cacheData = validatorStakingInfo.get(network)
+  const cacheData = await validatorStakingInfoCache.get(network)
 
   if(cacheData?.loading) return
 
-  validatorStakingInfo.set(network, {
+  await validatorStakingInfoCache.set(network, {
     ...cacheData,
     loading: true
   })
@@ -150,7 +150,7 @@ export const getValidatorsData = async (api: any, network: string) => {
     ...baseInfo
   }
 
-  validatorStakingInfo.set(network, {
+  await validatorStakingInfoCache.set(network, {
     info,
     loading: false
   })
@@ -161,14 +161,16 @@ export const getValidatorsList = async ({ apis, network }: ValidatorStakingProps
 
   if (!api) return []
 
-  const needUpdate = validatorStakingInfo.needUpdate
+  const needUpdate = validatorStakingInfoCache.needUpdate
 
-  const forceUpdate = needUpdate && needUpdate()
-  const cacheData = validatorStakingInfo.get(network)
+  const forceUpdate = needUpdate && await needUpdate()
+  const cacheData = await validatorStakingInfoCache.get(network)
 
   if (!cacheData || forceUpdate) {
     getValidatorsData(api, network)
   }
 
-  return validatorStakingInfo.get(network)?.info || {}
+  const validatorStakingInfo = await validatorStakingInfoCache.get(network)
+
+  return validatorStakingInfo?.info || {}
 }

@@ -1,41 +1,66 @@
 import { newLogger } from '@subsocial/utils'
+import { redisCallWrapper } from './redisCache'
 
 const log = newLogger('Cache data')
 
-class Cache <T extends any> {
-  private cache: T = {} as any
-  private lastUpdate = undefined
-  private ttlSeconds: number = undefined
+export const getRedisKey = (prefix: string, key: string) => `${prefix}:${key}`
 
-  constructor(ttlSeconds: number) {
-    this.lastUpdate = new Date().getTime()
+const getLastUpdate = (prefix: string) => `${prefix}:last-update-time`
+
+class Cache<T extends any> {
+  private ttlSeconds: number = undefined
+  private prefix: string = ''
+
+  constructor(prefix: string, ttlSeconds: number) {
+    redisCallWrapper((redis) => redis?.set(getLastUpdate(prefix), new Date().getTime()))
     this.ttlSeconds = ttlSeconds
+    this.prefix = prefix
   }
 
-  needUpdate = () => {
+  needUpdate = async () => {
     const now = new Date().getTime()
 
-    if (now > this.lastUpdate + this.ttlSeconds) {
+    const lastUpdate = await redisCallWrapper((redis) => redis?.get(getLastUpdate(this.prefix)))
+
+    if (now > parseInt(lastUpdate || '0') + this.ttlSeconds) {
       log.debug('Update properties')
-      this.lastUpdate = now
+      await redisCallWrapper((redis) => redis?.set(getLastUpdate(this.prefix), now))
       return true
     }
 
     return false
   }
 
-  get = (key: string) => {
-    return this.cache[key]
+  get = async (key: string) => {
+    const result = await redisCallWrapper(async (redis) =>
+      redis?.get(getRedisKey(this.prefix, key))
+    )
+
+    return result ? (JSON.parse(result) as T) : undefined
   }
 
-  set = <E extends any> (key: string, value: E) => {
-    this.cache[key] = value
+  set = async <E extends any>(key: string, value: E) => {
+    await redisCallWrapper((redis) => redis?.set(getRedisKey(this.prefix, key), JSON.stringify(value)))
   }
 
-  getAllValues = () => {
-    return this.cache
+  getAllValues = (keys: string[]) => {
+    return redisCallWrapper<Record<string, T>>(async (redis) => {
+      const resultPromise = keys.map(async (key) => {
+        const data = await redis.get(getRedisKey(this.prefix, key))
+        return JSON.parse(data)
+      })
+
+      const result = await Promise.all(resultPromise)
+
+      const data = {}
+
+      keys.forEach((key, i) => {
+        data[key] = result[i]
+      })
+
+      return data
+    })
   }
 }
-
 
 export default Cache

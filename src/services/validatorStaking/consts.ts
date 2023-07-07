@@ -3,7 +3,7 @@ import { ValidatorStakingProperties, ValidatorStakingProps } from './types'
 import Cache from '../../cache';
 
 const updateDelay = 7 * 24 * ONE_HOUR
-const stakingPropertiesCache = new Cache<Record<string, ValidatorStakingProperties>>(updateDelay)
+const stakingPropertiesCache = new Cache<Record<string, ValidatorStakingProperties>>('staking-consts', updateDelay)
 
 export const getCurrentEra = async ({ apis, network }: ValidatorStakingProps) => {
   const api = apis[network]
@@ -22,8 +22,8 @@ export const getStakingProps = async ({ apis, network }: ValidatorStakingProps):
 
   const needUpdate = stakingPropertiesCache.needUpdate
 
-  const forceUpdate = needUpdate && needUpdate()
-  const cacheData = stakingPropertiesCache.get(network)
+  const forceUpdate = needUpdate && await needUpdate()
+  const cacheData = await stakingPropertiesCache.get(network)
 
   if (!cacheData || forceUpdate) {
 

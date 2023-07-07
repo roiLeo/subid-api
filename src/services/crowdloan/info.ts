@@ -10,7 +10,7 @@ import { AnyId } from '@subsocial/api/types'
 import registry from '@subsocial/api/utils/registry'
 import Cache from '../../cache'
 
-const crowdloanInfo = new Cache(ONE_HOUR)
+const crowdloanInfoCache = new Cache('crowdloan-info', ONE_HOUR)
 
 export interface WinnerData {
   accountId: string
@@ -117,15 +117,15 @@ export const getCrowdloansByRelayChain = async ({ relayChain, apis }: GetCrowdlo
   const parachains = parachainsTupleByRelayChain[relayChain]
   const paraIds = parachains.map(([, { paraId }]) => paraId.toString())
 
-  const needUpdate = crowdloanInfo.needUpdate
-  const forceUpdate = needUpdate && needUpdate()
+  const needUpdate = crowdloanInfoCache.needUpdate
+  const forceUpdate = needUpdate && await needUpdate()
 
-  const cacheData = crowdloanInfo.get(relayChain)
+  const cacheData = await crowdloanInfoCache.get(relayChain)
 
   if (!cacheData || forceUpdate) {
     const data = await fetchCrowdloansInfo(api, paraIds)
-    crowdloanInfo.set(relayChain, data)
+    await crowdloanInfoCache.set(relayChain, data)
   }
 
-  return crowdloanInfo.get(relayChain) || []
+  return crowdloanInfoCache.get(relayChain) || []
 }

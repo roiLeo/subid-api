@@ -16,7 +16,7 @@ type ApiWithNetworkFn<T> = (api: ApiPromise, network: string) => Promise<T>
 
 type Properties<T = any> = {
   cache: Cache<T>,
-  needUpdate?: () => boolean
+  needUpdate?: () => Promise<boolean>
 }
 
 const log = newLogger('UTILS')
@@ -41,7 +41,7 @@ export const toGenericAccountId = (account?: string) =>
   export async function getFromSelectedNetwork<T = any, E = any>(apis: Apis, getData: ApiFn<T>, network: RelayChain, props?: Properties<E>) {  
     const { cache, needUpdate } = props
   
-    const forceUpdate = (needUpdate && needUpdate())
+    const forceUpdate = (needUpdate && await needUpdate())
   
     const cacheData = cache
   
@@ -55,16 +55,16 @@ export const toGenericAccountId = (account?: string) =>
       }
     }
   
-    return cache.getAllValues()
+    return cache.getAllValues(Object.keys(networks))
   }
 
 // TODO: combine with getFromSelectedNetwork
 export async function getInterestedAccountsFromSelectedNetwork<T = any, E = any>(apis: Apis, getData: ApiFn<T>, network: RelayChain, offset: number, limit: number, props?: Properties<E>) {
   const { cache, needUpdate } = props
 
-  const forceUpdate = (needUpdate && needUpdate())
+  const forceUpdate = (needUpdate && await needUpdate())
 
-  const cacheData = cache.get(network)
+  const cacheData = await cache.get(network)
 
   if (isEmptyObj(cacheData) || forceUpdate) {
     try {
@@ -77,7 +77,7 @@ export async function getInterestedAccountsFromSelectedNetwork<T = any, E = any>
     }
   }
 
-  const updatedCacheData = cache.get(network)
+  const updatedCacheData = await cache.get(network)
 
   if(Array.isArray(updatedCacheData)){
     return updatedCacheData.slice(offset, offset + limit)
@@ -88,14 +88,14 @@ export async function getInterestedAccountsFromSelectedNetwork<T = any, E = any>
 export async function getFromAllNetworks<T = any, E = any>(apis: Apis, getData: ApiWithNetworkFn<T>, props?: Properties<E>) {
   const { cache, needUpdate } = props
 
-  const forceUpdate = (needUpdate && needUpdate())
+  const forceUpdate = (needUpdate && await needUpdate())
 
   const promises = Object.entries(networks).map(async ([network]) => {
-    const cacheData = cache.get(network)
+    const cacheData = await cache.get(network)
 
     if (!cacheData || forceUpdate) {
       const data: T = await getData(apis[network], network)
-      cache.set(network, data)
+      await cache.set(network, data)
     }
   })
 
@@ -103,7 +103,7 @@ export async function getFromAllNetworks<T = any, E = any>(apis: Apis, getData: 
     log.warn(getFromAllNetworks.name, err)
   })
 
-  return cache.getAllValues()
+  return cache.getAllValues(Object.keys(networks))
 }
 
 export const fieldsToString = (fields?: Record<string, any>): Record<string, any> | undefined => {
